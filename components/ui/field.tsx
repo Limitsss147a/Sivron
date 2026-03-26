@@ -183,7 +183,7 @@ function FieldSeparator({
   )
 }
 
-function FieldError({
+function FieldMessage({
   className,
   children,
   errors,
@@ -234,7 +234,7 @@ export {
   Field,
   FieldLabel,
   FieldDescription,
-  FieldError,
+  FieldMessage,
   FieldGroup,
   FieldLegend,
   FieldSeparator,

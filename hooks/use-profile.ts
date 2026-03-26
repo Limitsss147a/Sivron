@@ -17,7 +17,7 @@ async function fetchProfile(): Promise<Profile | null> {
     .single()
 
   if (error) {
-    console.error('Error fetching profile:', error)
+    console.error('Error fetching profile:', error?.message || error, error?.details || '')
     return null
   }
 

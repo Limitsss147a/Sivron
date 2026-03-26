@@ -183,6 +183,10 @@ CREATE POLICY "budgets_update_own" ON budgets FOR UPDATE
   USING (
     (institution_id = get_user_institution() AND submitted_by = auth.uid() AND status IN ('draft', 'revision'))
     OR is_admin()
+  )
+  WITH CHECK (
+    (institution_id = get_user_institution() AND submitted_by = auth.uid())
+    OR is_admin()
   );
 
 DROP POLICY IF EXISTS "budgets_delete" ON budgets;

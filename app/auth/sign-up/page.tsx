@@ -46,8 +46,10 @@ export default function SignUpPage() {
         .from('institutions')
         .select('*')
         .order('name')
-      
-      if (!error && data) {
+
+      if (error) {
+        console.error('Error fetching institutions:', error)
+      } else if (data) {
         setInstitutions(data)
       }
       setIsLoadingInstitutions(false)
@@ -119,7 +121,7 @@ export default function SignUpPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="space-y-8">
           <div>
             <h2 className="text-3xl font-bold leading-tight text-balance">
@@ -129,7 +131,7 @@ export default function SignUpPage() {
               Daftar untuk mulai mengajukan dan mengelola anggaran instansi Anda secara digital.
             </p>
           </div>
-          
+
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/10">
@@ -151,7 +153,7 @@ export default function SignUpPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2 text-sm opacity-60">
           <ShieldCheck className="h-4 w-4" />
           <span>Data Anda aman dan terenkripsi</span>
@@ -223,11 +225,18 @@ export default function SignUpPage() {
                         <SelectValue placeholder={isLoadingInstitutions ? "Memuat..." : "Pilih instansi"} />
                       </SelectTrigger>
                       <SelectContent>
-                        {institutions.map((inst) => (
-                          <SelectItem key={inst.id} value={inst.id}>
-                            {inst.name} ({inst.code})
-                          </SelectItem>
-                        ))}
+                        {institutions.length === 0 && !isLoadingInstitutions ? (
+                          <div className="p-4 text-sm text-center text-muted-foreground">
+                            Tidak ada instansi ditemukan. <br />
+                            Silakan jalankan seed data atau periksa kebijakan RLS.
+                          </div>
+                        ) : (
+                          institutions.map((inst) => (
+                            <SelectItem key={inst.id} value={inst.id}>
+                              {inst.name} ({inst.code})
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   </Field>

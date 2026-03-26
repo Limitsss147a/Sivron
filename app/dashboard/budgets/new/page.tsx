@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
 import { formatCurrency } from '@/lib/format'
-import type { Program, Activity, SubActivity } from '@/lib/types/database'
+import type { Program, Activity, SubActivity, DocumentType } from '@/lib/types/database'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -30,8 +30,13 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, Trash2, Save, Send } from 'lucide-react'
+import { ArrowLeft, Plus, Trash2, Save, Send, UploadCloud, X, FileText } from 'lucide-react'
 import Link from 'next/link'
+
+interface DocumentUpload {
+  file: File
+  type: DocumentType | ''
+}
 
 interface BudgetItemRow {
   id?: string
@@ -68,6 +73,7 @@ export default function NewBudgetPage() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [subActivities, setSubActivities] = useState<SubActivity[]>([])
   const [isSaving, setIsSaving] = useState(false)
+  const [documents, setDocuments] = useState<DocumentUpload[]>([])
 
   useEffect(() => {
     if (!profileLoading && profile) fetchPrograms()
@@ -85,10 +91,14 @@ export default function NewBudgetPage() {
 
   async function fetchPrograms() {
     const supabase = createClient()
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('programs')
       .select('*')
       .order('code')
+      
+    if (error) {
+      console.error("Error fetching programs:", error.message)
+    }
     if (data) setPrograms(data)
   }
 
@@ -128,6 +138,24 @@ export default function NewBudgetPage() {
     }))
   }
 
+  function addDocument(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files.length > 0) {
+      const newDocs = Array.from(e.target.files).map(file => ({
+        file,
+        type: '' as DocumentType | ''
+      }))
+      setDocuments(prev => [...prev, ...newDocs])
+    }
+  }
+
+  function removeDocument(index: number) {
+    setDocuments(prev => prev.filter((_, i) => i !== index))
+  }
+
+  function updateDocumentType(index: number, type: DocumentType) {
+    setDocuments(prev => prev.map((doc, i) => i === index ? { ...doc, type } : doc))
+  }
+
   const totalAmount = items.reduce((sum, item) => sum + (item.quantity * item.unit_price), 0)
 
   async function handleSubmit(asDraft: boolean) {
@@ -139,6 +167,12 @@ export default function NewBudgetPage() {
     const validItems = items.filter(item => item.item_name.trim())
     if (validItems.length === 0) {
       toast.error('Minimal satu item anggaran harus diisi')
+      return
+    }
+
+    const hasIncompleteDocs = documents.some(doc => !doc.type)
+    if (hasIncompleteDocs) {
+      toast.error('Silakan pilih jenis dokumen untuk semua file pendukung')
       return
     }
 
@@ -170,7 +204,7 @@ export default function NewBudgetPage() {
           activity_id: activityId || null,
           sub_activity_id: subActivityId || null,
           submitted_by: profile!.id,
-          status: asDraft ? 'draft' : 'submitted',
+          status: 'draft', // Always draft during insertion due to RLS policies
           submission_date: asDraft ? null : new Date().toISOString(),
           total_amount: totalAmount,
         })
@@ -198,13 +232,56 @@ export default function NewBudgetPage() {
 
       if (itemsError) throw itemsError
 
+      // Insert budget documents
+      if (documents.length > 0) {
+        const budgetDocInserts = []
+        for (const doc of documents) {
+          if (!doc.type) continue
+          
+          const fileExt = doc.file.name.split('.').pop()
+          const fileName = `${budget.id}/${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+          
+          const { error: uploadError } = await supabase.storage
+            .from('budget_documents')
+            .upload(fileName, doc.file)
+            
+          if (!uploadError) {
+            budgetDocInserts.push({
+              budget_id: budget.id,
+              file_name: doc.file.name,
+              file_path: fileName,
+              file_type: doc.file.type || 'application/octet-stream',
+              file_size: doc.file.size,
+              document_type: doc.type,
+              uploaded_by: profile!.id
+            })
+          } else {
+            console.error('Failed to upload document:', uploadError)
+          }
+        }
+        
+        if (budgetDocInserts.length > 0) {
+          await supabase.from('budget_documents').insert(budgetDocInserts)
+        }
+      }
+
+      // If user wants to submit immediately, update the status to 'submitted' now that items are inserted
+      if (!asDraft) {
+        const { error: updateError } = await supabase
+          .from('budgets')
+          .update({ status: 'submitted' })
+          .eq('id', budget.id)
+          
+        if (updateError) throw updateError
+      }
+
       toast.success(
         asDraft ? 'Pengajuan berhasil disimpan sebagai draft' : 'Pengajuan berhasil diajukan'
       )
       router.push('/dashboard/budgets')
-    } catch (error) {
-      console.error('Error saving budget:', error)
-      toast.error('Gagal menyimpan pengajuan')
+    } catch (error: any) {
+      console.error('Error saving budget:', error?.message || error)
+      toast.error(`Gagal menyimpan: ${error?.message || 'Terjadi kesalahan sistem'}`)
     } finally {
       setIsSaving(false)
     }
@@ -413,6 +490,55 @@ export default function NewBudgetPage() {
             </Table>
           </div>
         </CardContent>
+      </Card>
+
+      {/* Supporting Documents */}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-base">Dokumen Pendukung</CardTitle>
+            <CardDescription>RAB, TOR, atau file pendukung lainnya</CardDescription>
+          </div>
+          <div>
+            <Label htmlFor="file-upload" className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors h-9 px-3">
+              <UploadCloud className="mr-2 h-4 w-4" />
+              Unggah File
+            </Label>
+            <Input id="file-upload" type="file" multiple className="hidden" onChange={addDocument} disabled={isSaving} />
+          </div>
+        </CardHeader>
+        {documents.length > 0 && (
+          <CardContent className="space-y-3">
+            {documents.map((doc, index) => (
+              <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-4 p-3 border rounded-md">
+                <div className="flex items-center gap-3 flex-1 overflow-hidden">
+                  <FileText className="h-8 w-8 text-muted-foreground shrink-0" />
+                  <div className="overflow-hidden">
+                    <p className="text-sm font-medium truncate">{doc.file.name}</p>
+                    <p className="text-xs text-muted-foreground">{(doc.file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Select value={doc.type} onValueChange={(val: DocumentType) => updateDocumentType(index, val)} disabled={isSaving}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Pilih Jenis Dokumen" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="rab">RAB</SelectItem>
+                      <SelectItem value="tor">TOR</SelectItem>
+                      <SelectItem value="rkakl">RKA-KL</SelectItem>
+                      <SelectItem value="supporting">Dokumen Pendukung</SelectItem>
+                      <SelectItem value="other">Lainnya</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive shrink-0" onClick={() => removeDocument(index)} disabled={isSaving}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        )}
       </Card>
 
       {/* Actions */}

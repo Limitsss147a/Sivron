@@ -106,10 +106,10 @@ export default function NotificationsPage() {
                         <h3 className="font-semibold text-sm">{notif.title}</h3>
                         <Badge className={`${typeColor[notif.type] || ''} border-0 text-[10px]`}>
                           {notif.type === 'revision_request' ? 'Revisi' :
-                           notif.type === 'approval' ? 'Disetujui' :
-                           notif.type === 'rejection' ? 'Ditolak' :
-                           notif.type === 'status_change' ? 'Status' :
-                           notif.type === 'warning' ? 'Peringatan' : 'Info'}
+                            notif.type === 'approval' ? 'Disetujui' :
+                              notif.type === 'rejection' ? 'Ditolak' :
+                                notif.type === 'status_change' ? 'Status' :
+                                  notif.type === 'warning' ? 'Peringatan' : 'Info'}
                         </Badge>
                         {!notif.is_read && (
                           <span className="h-2 w-2 rounded-full bg-primary shrink-0" />

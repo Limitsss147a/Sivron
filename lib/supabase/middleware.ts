@@ -6,6 +6,7 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  // Create a supabase client to handle authentication in the middleware
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -14,7 +15,7 @@ export async function updateSession(request: NextRequest) {
         getAll() {
           return request.cookies.getAll()
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet: { name: string; value: string; options: any }[]) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           )
@@ -29,31 +30,64 @@ export async function updateSession(request: NextRequest) {
     },
   )
 
-  // IMPORTANT: Must call getUser() to refresh the session
+  /**
+   * IMPORTANT: Always call getUser() to refresh the session.
+   * Do not remove this, it ensures the user's session is still valid.
+   */
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   const pathname = request.nextUrl.pathname
 
-  // Public routes that don't require authentication
+  // Public/Auth routes that don't require protection
+  const isAuthPage = pathname.startsWith('/auth/')
   const publicRoutes = ['/', '/auth/login', '/auth/sign-up', '/auth/sign-up-success', '/auth/error', '/auth/callback']
-  const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith('/auth/'))
+  
+  // Logic fix for isPublicRoute: 
+  // - If it's in publicRoutes
+  // - If it's an auth page (except for callback which is special)
+  const isPublicRoute = publicRoutes.includes(pathname) || (isAuthPage && pathname !== '/auth/callback')
 
-  // Protected routes - redirect to login if not authenticated
-  if (!user && !isPublicRoute) {
+  /**
+   * Protected routes - redirect to login if not authenticated
+   * We also ignore system routes like _next/static, favicon.ico, etc.
+   */
+  if (!user && !isPublicRoute && !pathname.startsWith('/_next') && pathname !== '/favicon.ico') {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     url.searchParams.set('redirect', pathname)
-    return NextResponse.redirect(url)
+    
+    // Construct the redirect response
+    const redirectResponse = NextResponse.redirect(url)
+    
+    // IMPORTANT: Make sure to copy cookies from the supabaseResponse to the redirect response.
+    // If we don't do this, the refreshed session might be lost.
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    
+    return redirectResponse
   }
 
-  // If user is logged in and trying to access auth pages, redirect to dashboard
-  if (user && (pathname.startsWith('/auth/') && pathname !== '/auth/callback')) {
+  /**
+   * If user is logged in and trying to access auth pages (login, sign-up, etc.), 
+   * redirect them to the dashboard.
+   */
+  if (user && isAuthPage && pathname !== '/auth/callback') {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
+    
+    const redirectResponse = NextResponse.redirect(url)
+    
+    // Copy cookies to persist the session refresh
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+        redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    
+    return redirectResponse
   }
 
+  // Fall through to returning the original supabaseResponse which contains the updated cookies
   return supabaseResponse
 }
