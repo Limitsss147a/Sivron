@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
-import { formatCurrency, formatDate } from '@/lib/format'
+import { formatDate } from '@/lib/format'
 import { statusConfig, type Budget, type BudgetStatus } from '@/lib/types/database'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -73,7 +73,7 @@ export default function BudgetsPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Pengajuan Anggaran</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Pengajuan RKA/DPA</h1>
           <p className="text-muted-foreground">
             {isAdmin ? 'Seluruh pengajuan anggaran dari semua instansi' : 'Kelola pengajuan anggaran instansi Anda'}
           </p>
@@ -149,7 +149,6 @@ export default function BudgetsPage() {
                   <TableHead>Judul Pengajuan</TableHead>
                   {isAdmin && <TableHead>Instansi</TableHead>}
                   <TableHead>Program</TableHead>
-                  <TableHead className="text-right">Nominal</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Tanggal</TableHead>
                 </TableRow>
@@ -179,9 +178,6 @@ export default function BudgetsPage() {
                       )}
                       <TableCell className="text-sm text-muted-foreground">
                         {budget.program_name || (budget as any).program?.name || '-'}
-                      </TableCell>
-                      <TableCell className="text-right font-medium text-sm">
-                        {formatCurrency(Number(budget.total_amount))}
                       </TableCell>
                       <TableCell>
                         <Badge className={`${config.color} border-0 text-[11px]`}>

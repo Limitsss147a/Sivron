@@ -4,50 +4,19 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
-import { formatCurrency, formatDate, formatDateTime } from '@/lib/format'
-import { statusConfig, type Budget, type BudgetItem, type BudgetDocument, type Revision, type BudgetStatus } from '@/lib/types/database'
+import { formatDateTime } from '@/lib/format'
+import { statusConfig, type Budget, type BudgetDocument, type Revision, type BudgetStatus } from '@/lib/types/database'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
 import {
-  ArrowLeft,
-  Edit,
-  Send,
-  Trash2,
-  FileText,
-  Clock,
-  User,
-  Building2,
-  CalendarDays,
-  MessageSquare,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  ArrowRightLeft,
+  ArrowLeft, Edit, Send, Trash2, FileText, Download, Clock, CheckCircle2, XCircle, AlertCircle, ArrowRightLeft, MessageSquare,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -55,8 +24,7 @@ export default function BudgetDetailPage() {
   const params = useParams()
   const router = useRouter()
   const { profile, isAdmin } = useProfile()
-  const [budget, setBudget] = useState<Budget | null>(null)
-  const [items, setItems] = useState<BudgetItem[]>([])
+  const [budget, setBudget] = useState<any>(null)
   const [revisions, setRevisions] = useState<Revision[]>([])
   const [documents, setDocuments] = useState<BudgetDocument[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -64,39 +32,24 @@ export default function BudgetDetailPage() {
 
   const budgetId = params.id as string
 
-  useEffect(() => {
-    fetchBudgetDetail()
-  }, [budgetId])
+  useEffect(() => { fetchBudgetDetail() }, [budgetId])
 
   async function fetchBudgetDetail() {
     const supabase = createClient()
     setIsLoading(true)
 
-    const [budgetRes, itemsRes, revisionsRes, docsRes] = await Promise.all([
-      supabase
-        .from('budgets')
-        .select('*, institution:institutions(name, code), program:programs(name, code), activity:activities(name, code), sub_activity:sub_activities(name, code), submitter:profiles!budgets_submitted_by_fkey(full_name, position), reviewer:profiles!budgets_reviewed_by_fkey(full_name)')
-        .eq('id', budgetId)
-        .single(),
-      supabase
-        .from('budget_items')
-        .select('*')
-        .eq('budget_id', budgetId)
-        .order('sort_order'),
-      supabase
-        .from('revisions')
+    const [budgetRes, revisionsRes, docsRes] = await Promise.all([
+      supabase.from('budgets')
+        .select('*, institution:institutions(name, code), submitter:profiles!budgets_submitted_by_fkey(full_name, position)')
+        .eq('id', budgetId).single(),
+      supabase.from('revisions')
         .select('*, reviewer:profiles!revisions_reviewer_id_fkey(full_name)')
-        .eq('budget_id', budgetId)
-        .order('created_at', { ascending: false }),
-      supabase
-        .from('budget_documents')
-        .select('*')
-        .eq('budget_id', budgetId)
-        .order('created_at', { ascending: false }),
+        .eq('budget_id', budgetId).order('created_at', { ascending: false }),
+      supabase.from('budget_documents')
+        .select('*').eq('budget_id', budgetId).order('created_at', { ascending: false }),
     ])
 
-    if (budgetRes.data) setBudget(budgetRes.data as unknown as Budget)
-    if (itemsRes.data) setItems(itemsRes.data)
+    if (budgetRes.data) setBudget(budgetRes.data)
     if (revisionsRes.data) setRevisions(revisionsRes.data as unknown as Revision[])
     if (docsRes.data) setDocuments(docsRes.data)
 
@@ -107,18 +60,11 @@ export default function BudgetDetailPage() {
     setIsSubmitting(true)
     const supabase = createClient()
 
-    const { error } = await supabase
-      .from('budgets')
-      .update({
-        status: 'submitted',
-        submission_date: new Date().toISOString(),
-      })
-      .eq('id', budgetId)
-
+    const { error } = await supabase.from('budgets').update({ status: 'submitted', submission_date: new Date().toISOString() }).eq('id', budgetId)
     if (error) {
-      toast.error('Gagal mengajukan anggaran')
+      toast.error('Gagal mengajukan RKA/DPA')
     } else {
-      toast.success('Anggaran berhasil diajukan')
+      toast.success('RKA/DPA berhasil diajukan')
       fetchBudgetDetail()
     }
     setIsSubmitting(false)
@@ -127,14 +73,9 @@ export default function BudgetDetailPage() {
   async function handleDownload(doc: BudgetDocument) {
     try {
       const supabase = createClient()
-      const { data, error } = await supabase.storage
-        .from('budget_documents')
-        .createSignedUrl(doc.file_path, 3600)
-        
+      const { data, error } = await supabase.storage.from('budget_documents').createSignedUrl(doc.file_path, 3600)
       if (error) throw error
-      if (data?.signedUrl) {
-        window.open(data.signedUrl, '_blank')
-      }
+      if (data?.signedUrl) window.open(data.signedUrl, '_blank')
     } catch (error) {
       toast.error('Gagal mengunduh dokumen')
     }
@@ -142,12 +83,7 @@ export default function BudgetDetailPage() {
 
   async function handleDelete() {
     const supabase = createClient()
-
-    const { error } = await supabase
-      .from('budgets')
-      .delete()
-      .eq('id', budgetId)
-
+    const { error } = await supabase.from('budgets').delete().eq('id', budgetId)
     if (error) {
       toast.error('Gagal menghapus pengajuan')
     } else {
@@ -156,32 +92,35 @@ export default function BudgetDetailPage() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="space-y-6 max-w-5xl">
-        <Skeleton className="h-8 w-64" />
-        <Card><CardContent className="p-6"><Skeleton className="h-40 w-full" /></CardContent></Card>
-        <Card><CardContent className="p-6"><Skeleton className="h-60 w-full" /></CardContent></Card>
-      </div>
-    )
-  }
-
-  if (!budget) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <FileText className="h-12 w-12 text-muted-foreground/40 mb-3" />
-        <h3 className="font-semibold text-lg">Pengajuan tidak ditemukan</h3>
-        <Button variant="link" asChild className="mt-2">
-          <Link href="/dashboard/budgets">Kembali ke daftar</Link>
-        </Button>
-      </div>
-    )
-  }
+  if (isLoading) return <div className="space-y-6 max-w-4xl"><Skeleton className="h-8 w-64" /><Card><CardContent className="p-6"><Skeleton className="h-40 w-full" /></CardContent></Card></div>
+  if (!budget) return <div className="flex flex-col items-center justify-center py-20"><p>Pengajuan tidak ditemukan</p></div>
 
   const config = statusConfig[budget.status as BudgetStatus]
-  const canEdit = !isAdmin && (budget.status === 'draft' || budget.status === 'revision')
   const canSubmit = !isAdmin && budget.status === 'draft'
   const canDelete = !isAdmin && budget.status === 'draft'
+
+  const statusBadgeColor = (status: string) => {
+    switch(status) {
+      case 'approved': return 'bg-green-100 text-green-800'
+      case 'rejected': return 'bg-red-100 text-red-800'
+      case 'revision': return 'bg-orange-100 text-orange-800'
+      default: return 'bg-yellow-100 text-yellow-800'
+    }
+  }
+
+  const statusLabels: Record<string, string> = {
+    pending: 'Menunggu',
+    approved: 'Disetujui',
+    rejected: 'Ditolak',
+    revision: 'Perlu Revisi',
+  }
+
+  const ADMIN_ROLES = [
+    { key: 'review_bapperida', label: 'Bapperida' },
+    { key: 'review_setda', label: 'Setda' },
+    { key: 'review_anggaran', label: 'Bidang Anggaran BKAD' },
+    { key: 'review_aset', label: 'Bidang Aset BKAD' },
+  ]
 
   const revisionStatusIcon = (status: BudgetStatus) => {
     switch (status) {
@@ -194,13 +133,8 @@ export default function BudgetDetailPage() {
     }
   }
 
-  const totalAmountBefore = items.reduce((sum, item) => sum + (Number(item.quantity_before || 0) * Number(item.unit_price_before || 0)), 0)
-  const totalAmount = items.reduce((sum, item) => sum + (Number(item.quantity) * Number(item.unit_price)), 0)
-  const totalDifference = totalAmount - totalAmountBefore
-
   return (
-    <div className="space-y-6 max-w-5xl">
-      {/* Header */}
+    <div className="space-y-6 max-w-4xl">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
           <Button variant="ghost" size="icon" asChild className="mt-1">
@@ -210,25 +144,10 @@ export default function BudgetDetailPage() {
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-bold tracking-tight">{budget.title}</h1>
               <Badge className={`${config.color} border-0`}>{config.label}</Badge>
-              {budget.version > 1 && (
-                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
-                  Versi {budget.version}
-                </span>
-              )}
             </div>
-            {budget.description && (
-              <p className="text-muted-foreground mt-1">{budget.description}</p>
-            )}
           </div>
         </div>
         <div className="flex gap-2 sm:ml-auto">
-          {canEdit && (
-            <Button variant="outline" size="sm" asChild>
-              <Link href={`/dashboard/budgets/${budgetId}/edit`}>
-                <Edit className="mr-1 h-3 w-3" /> Edit
-              </Link>
-            </Button>
-          )}
           {canSubmit && (
             <Button size="sm" onClick={handleSubmit} disabled={isSubmitting}>
               {isSubmitting ? <Spinner className="mr-1" /> : <Send className="mr-1 h-3 w-3" />}
@@ -261,223 +180,92 @@ export default function BudgetDetailPage() {
         </div>
       </div>
 
-      {/* Info Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="rounded-lg p-2 bg-primary/10">
-              <Building2 className="h-4 w-4 text-primary" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">Instansi</p>
-              <p className="text-sm font-medium truncate">{(budget as any).institution?.name || '-'}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="rounded-lg p-2 bg-chart-1/10">
-              <FileText className="h-4 w-4 text-chart-1" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">Program</p>
-              <p className="text-sm font-medium truncate">{budget.program_name || (budget as any).program?.name || '-'}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="rounded-lg p-2 bg-chart-2/10">
-              <User className="h-4 w-4 text-chart-2" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">Pengaju</p>
-              <p className="text-sm font-medium truncate">{(budget as any).submitter?.full_name || '-'}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="rounded-lg p-2 bg-chart-3/10">
-              <CalendarDays className="h-4 w-4 text-chart-3" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">Tanggal Pengajuan</p>
-              <p className="text-sm font-medium">{formatDate(budget.submission_date)}</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Budget Items */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Rincian Anggaran</CardTitle>
-          <CardDescription>{items.length} item | Total: {formatCurrency(Number(budget.total_amount))}</CardDescription>
+          <CardTitle className="text-base">SKPD Pengusul</CardTitle>
+          <CardDescription>Informasi Instansi yang mengajukan</CardDescription>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead rowSpan={2} className="w-[50px] text-center border-r align-middle">#</TableHead>
-                  <TableHead rowSpan={2} className="min-w-[120px] text-center border-r align-middle">Kode Rekening</TableHead>
-                  <TableHead rowSpan={2} className="min-w-[200px] text-center border-r align-middle">Uraian / Item</TableHead>
-                  <TableHead colSpan={4} className="text-center border-b border-r bg-muted/30">Sebelum</TableHead>
-                  <TableHead colSpan={4} className="text-center border-b border-r bg-primary/5">Setelah</TableHead>
-                  <TableHead rowSpan={2} className="text-center min-w-[140px] border-r align-middle font-semibold">Bertambah/<br/>Berkurang</TableHead>
-                </TableRow>
-                <TableRow>
-                  {/* Sebelum */}
-                  <TableHead className="min-w-[80px] text-center border-r bg-muted/30 text-xs">Vol</TableHead>
-                  <TableHead className="min-w-[80px] text-center border-r bg-muted/30 text-xs">Satuan</TableHead>
-                  <TableHead className="min-w-[120px] text-center border-r bg-muted/30 text-xs">Harga</TableHead>
-                  <TableHead className="text-right min-w-[120px] border-r bg-muted/30 text-xs">Jumlah</TableHead>
-                  {/* Setelah */}
-                  <TableHead className="min-w-[80px] text-center border-r bg-primary/5 text-xs">Vol</TableHead>
-                  <TableHead className="min-w-[80px] text-center border-r bg-primary/5 text-xs">Satuan</TableHead>
-                  <TableHead className="min-w-[120px] text-center border-r bg-primary/5 text-xs">Harga</TableHead>
-                  <TableHead className="text-right min-w-[120px] border-r bg-primary/5 text-xs">Jumlah</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {items.map((item, i) => {
-                  const qBefore = Number(item.quantity_before || 0)
-                  const pBefore = Number(item.unit_price_before || 0)
-                  const totalBefore = qBefore * pBefore
-                  
-                  const qAfter = Number(item.quantity)
-                  const pAfter = Number(item.unit_price)
-                  const totalAfter = qAfter * pAfter
-                  
-                  const diff = totalAfter - totalBefore
-                  
-                  return (
-                    <TableRow key={item.id}>
-                      <TableCell className="text-muted-foreground text-center border-r">{i + 1}</TableCell>
-                      <TableCell className="text-sm border-r">{item.account_code || '-'}</TableCell>
-                      <TableCell className="border-r">
-                        <div className="font-medium text-sm">{item.item_name}</div>
-                        {item.specification && (
-                          <p className="text-xs text-muted-foreground mt-0.5">{item.specification}</p>
-                        )}
-                      </TableCell>
-                      {/* Sebelum */}
-                      <TableCell className="text-center text-sm border-r bg-muted/10">{qBefore}</TableCell>
-                      <TableCell className="text-center text-sm border-r bg-muted/10">{item.unit_before || item.unit}</TableCell>
-                      <TableCell className="text-right text-sm border-r bg-muted/10">{formatCurrency(pBefore)}</TableCell>
-                      <TableCell className="text-right font-medium text-sm border-r bg-muted/10">{formatCurrency(totalBefore)}</TableCell>
-                      {/* Setelah */}
-                      <TableCell className="text-center text-sm border-r bg-primary/[0.02]">{qAfter}</TableCell>
-                      <TableCell className="text-center text-sm border-r bg-primary/[0.02]">{item.unit}</TableCell>
-                      <TableCell className="text-right text-sm border-r bg-primary/[0.02]">{formatCurrency(pAfter)}</TableCell>
-                      <TableCell className="text-right font-medium text-sm border-r bg-primary/[0.02]">{formatCurrency(totalAfter)}</TableCell>
-                      {/* Difference */}
-                      <TableCell className={`text-right font-semibold text-sm border-r align-middle ${diff < 0 ? 'text-destructive' : 'text-emerald-600'}`}>
-                        {diff < 0 ? '(' : ''}{formatCurrency(Math.abs(diff))}{diff < 0 ? ')' : ''}
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell colSpan={3} className="text-right font-bold border-r">Total Anggaran</TableCell>
-                  <TableCell colSpan={4} className="text-right font-bold border-r bg-muted/30">{formatCurrency(totalAmountBefore)}</TableCell>
-                  <TableCell colSpan={4} className="text-right font-bold border-r bg-primary/5">{formatCurrency(totalAmount)}</TableCell>
-                  <TableCell className={`text-right font-bold border-r ${totalDifference < 0 ? 'text-destructive' : 'text-emerald-600'}`}>
-                    {totalDifference < 0 ? '(' : ''}{formatCurrency(Math.abs(totalDifference))}{totalDifference < 0 ? ')' : ''}
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
+        <CardContent>
+          <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <p className="font-semibold text-lg text-primary">{budget.institution?.name || '-'}</p>
+            <p className="text-sm text-muted-foreground mt-1">Kode: {budget.institution?.code || '-'}</p>
           </div>
         </CardContent>
       </Card>
 
-      {/* Supporting Documents */}
-      {documents.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Dokumen Pendukung</CardTitle>
-            <CardDescription>File pendukung yang dilampirkan</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {documents.map((doc, index) => (
-              <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-4 p-3 border rounded-md">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <FileText className="h-8 w-8 text-muted-foreground shrink-0" />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{doc.file_name}</p>
-                    <p className="text-xs text-muted-foreground uppercase">{doc.document_type} • {(doc.file_size / 1024 / 1024).toFixed(2)} MB</p>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-6">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Dokumen RKA/DPA</CardTitle>
+              <CardDescription>File pendukung yang dilampirkan</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {documents.length > 0 ? documents.map((doc, index) => (
+                <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 border rounded-md bg-background">
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <FileText className={`h-8 w-8 shrink-0 ${doc.document_type === 'rka_dpa' ? 'text-emerald-500' : 'text-blue-500'}`} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">{doc.file_name}</p>
+                      <p className="text-xs text-muted-foreground uppercase">{doc.document_type.replace('_', ' ')} • {(doc.file_size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
                   </div>
+                  <Button variant="secondary" size="sm" onClick={() => handleDownload(doc)}>
+                    <Download className="mr-2 w-4 h-4" /> Buka
+                  </Button>
                 </div>
-                <Button variant="secondary" size="sm" className="shrink-0" onClick={() => handleDownload(doc)}>
-                  Lihat/Unduh
-                </Button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+              )) : (
+                <p className="text-sm text-muted-foreground italic">Tidak ada dokumen terlampir.</p>
+              )}
+            </CardContent>
+          </Card>
 
-      {/* Revision History */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Riwayat Status</CardTitle>
-          <CardDescription>Timeline perubahan status pengajuan</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {revisions.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-6">
-              Belum ada riwayat perubahan status
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {revisions.map((rev, index) => {
-                const fromConfig = statusConfig[rev.from_status]
-                const toConfig = statusConfig[rev.to_status]
-                return (
-                  <div key={rev.id} className="relative flex gap-4">
-                    {/* Timeline line */}
-                    {index < revisions.length - 1 && (
-                      <div className="absolute left-[13px] top-8 bottom-0 w-px bg-border" />
-                    )}
-                    {/* Icon */}
-                    <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border bg-background">
-                      {revisionStatusIcon(rev.to_status)}
-                    </div>
-                    {/* Content */}
-                    <div className="flex-1 min-w-0 pb-4">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <Badge className={`${fromConfig.color} border-0 text-[10px]`}>{fromConfig.label}</Badge>
-                        <ArrowRightLeft className="h-3 w-3 text-muted-foreground" />
-                        <Badge className={`${toConfig.color} border-0 text-[10px]`}>{toConfig.label}</Badge>
+          {revisions.length > 0 && (
+            <Card>
+              <CardHeader><CardTitle className="text-base">Riwayat Review</CardTitle></CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {revisions.map((rev, index) => (
+                    <div key={rev.id} className="relative flex gap-4">
+                      {index < revisions.length - 1 && <div className="absolute left-[13px] top-8 bottom-0 w-px bg-border" />}
+                      <div className="flex-1 pb-4">
+                        <p className="text-xs text-muted-foreground">{(rev as any).reviewer?.full_name || 'System'} • {formatDateTime(rev.created_at)}</p>
+                        {rev.comments && (
+                          <div className="mt-1.5 rounded-md bg-muted/50 p-2.5 text-sm">{rev.comments}</div>
+                        )}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {(rev as any).reviewer?.full_name || 'System'} • {formatDateTime(rev.created_at)}
-                      </p>
-                      {rev.comments && (
-                        <div className="mt-2 rounded-md bg-muted/50 p-3">
-                          <div className="flex items-start gap-2">
-                            <MessageSquare className="h-3.5 w-3.5 text-muted-foreground mt-0.5 shrink-0" />
-                            <p className="text-sm">{rev.comments}</p>
-                          </div>
-                        </div>
-                      )}
-                      {rev.revision_notes && (
-                        <div className="mt-2 rounded-md bg-orange-50 border border-orange-200 p-3">
-                          <p className="text-sm text-orange-800">{rev.revision_notes}</p>
-                        </div>
-                      )}
                     </div>
-                  </div>
-                )
-              })}
-            </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           )}
-        </CardContent>
-      </Card>
+        </div>
+
+        <div>
+          <Card className="border-primary/20 sticky top-6">
+            <CardHeader className="bg-primary/5 pb-4">
+              <CardTitle className="text-base">Status Verifikasi</CardTitle>
+              <CardDescription>Status dari 4 admin reviewer</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="divide-y">
+                {ADMIN_ROLES.map((role) => {
+                  const statusStr = budget[role.key] || 'pending'
+                  const labelStr = statusLabels[statusStr] || 'Menunggu'
+                  
+                  return (
+                    <div key={role.key} className="p-4 flex items-center justify-between">
+                      <p className="font-semibold text-sm">{role.label}</p>
+                      <Badge className={`${statusBadgeColor(statusStr)} border-0 shadow-none`}>{labelStr}</Badge>
+                    </div>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 }

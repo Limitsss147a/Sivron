@@ -49,14 +49,14 @@ import {
 
 const userMenuItems = [
   { title: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { title: 'Pengajuan Anggaran', href: '/dashboard/budgets', icon: FileText },
+  { title: 'Pengajuan RKA/DPA', href: '/dashboard/budgets', icon: FileText },
   { title: 'Notifikasi', href: '/dashboard/notifications', icon: BellRing },
 ]
 
 const adminMenuItems = [
   { title: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { title: 'Verifikasi Anggaran', href: '/dashboard/review', icon: ClipboardCheck },
-  { title: 'Pengajuan Anggaran', href: '/dashboard/budgets', icon: FileText },
+  { title: 'Verifikasi RKA/DPA', href: '/dashboard/review', icon: ClipboardCheck },
+  { title: 'Pengajuan RKA/DPA', href: '/dashboard/budgets', icon: FileText },
   { title: 'Notifikasi', href: '/dashboard/notifications', icon: BellRing },
 ]
 
@@ -233,11 +233,32 @@ export default function DashboardLayout({
       {/* Main content area */}
       <SidebarInset>
         {/* Top header bar */}
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1 hidden md:flex" />
-          <Separator orientation="vertical" className="mr-2 h-4 hidden md:block" />
-          <div className="flex-1" />
-          <NotificationBell />
+        <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="flex items-center gap-2 flex-1">
+            <SidebarTrigger className="-ml-1 hidden md:flex" />
+            <Separator orientation="vertical" className="mx-2 h-4 hidden md:block" />
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-primary text-primary-foreground md:hidden">
+                <Building2 className="h-3.5 w-3.5" />
+              </div>
+              <h2 className="text-sm font-semibold text-foreground tracking-tight">
+                E-Budgeting
+              </h2>
+              <Separator orientation="vertical" className="mx-1 h-3 hidden sm:block" />
+              <span className="text-xs font-medium text-muted-foreground hidden sm:block">
+                {new Intl.DateTimeFormat('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date())}
+              </span>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex text-right mr-1 sm:mr-2">
+              <p className="text-xs font-medium leading-none truncate max-w-[80px] sm:max-w-[150px]">
+                Halo, {profile?.full_name?.split(' ')[0] || 'User'}
+              </p>
+            </div>
+            <NotificationBell />
+          </div>
         </header>
 
         {/* Page content */}

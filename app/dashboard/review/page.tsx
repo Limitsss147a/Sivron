@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
-import { formatCurrency, formatDate } from '@/lib/format'
+import { formatDate } from '@/lib/format'
 import { statusConfig, type Budget, type BudgetStatus } from '@/lib/types/database'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -71,8 +71,8 @@ export default function ReviewPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Verifikasi Anggaran</h1>
-        <p className="text-muted-foreground">Review dan verifikasi pengajuan anggaran dari seluruh instansi</p>
+        <h1 className="text-2xl font-bold tracking-tight">Verifikasi RKA/DPA</h1>
+        <p className="text-muted-foreground">Review dan verifikasi pengajuan RKA/DPA dari seluruh instansi</p>
       </div>
 
       <Card>
@@ -117,7 +117,6 @@ export default function ReviewPage() {
                   <TableHead>Judul</TableHead>
                   <TableHead>Instansi</TableHead>
                   <TableHead>Pengaju</TableHead>
-                  <TableHead className="text-right">Nominal</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Tanggal</TableHead>
                   <TableHead className="w-[60px]" />
@@ -136,7 +135,6 @@ export default function ReviewPage() {
                       </TableCell>
                       <TableCell className="text-sm">{(budget as any).institution?.name || '-'}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">{(budget as any).submitter?.full_name || '-'}</TableCell>
-                      <TableCell className="text-right font-medium text-sm">{formatCurrency(Number(budget.total_amount))}</TableCell>
                       <TableCell><Badge className={`${config.color} border-0 text-[11px]`}>{config.label}</Badge></TableCell>
                       <TableCell className="text-sm text-muted-foreground">{formatDate(budget.submission_date || budget.updated_at)}</TableCell>
                       <TableCell>

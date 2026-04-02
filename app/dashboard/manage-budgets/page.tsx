@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
-import { formatCurrency, formatDate } from '@/lib/format'
+import { formatDate } from '@/lib/format'
 import { statusConfig, type Budget, type BudgetStatus } from '@/lib/types/database'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -173,7 +173,6 @@ export default function ManageBudgetsPage() {
                   <TableHead>Judul</TableHead>
                   <TableHead>Instansi</TableHead>
                   <TableHead>Pengaju</TableHead>
-                  <TableHead className="text-right">Nominal</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Diperbarui</TableHead>
                   <TableHead className="w-[80px]" />
@@ -198,9 +197,6 @@ export default function ManageBudgetsPage() {
                       <TableCell className="text-sm">{(budget as any).institution?.name || '-'}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {(budget as any).submitter?.full_name || '-'}
-                      </TableCell>
-                      <TableCell className="text-right font-medium text-sm">
-                        {formatCurrency(Number(budget.total_amount))}
                       </TableCell>
                       <TableCell>
                         <Badge className={`${config.color} border-0 text-[11px]`}>{config.label}</Badge>

@@ -314,7 +314,6 @@ export default function DashboardPage() {
                   <TableRow>
                     <TableHead>Judul</TableHead>
                     {isAdmin && <TableHead>Instansi</TableHead>}
-                    <TableHead className="text-right">Nominal</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -339,9 +338,6 @@ export default function DashboardPage() {
                             {(budget as any).institution?.name || '-'}
                           </TableCell>
                         )}
-                        <TableCell className="text-right font-medium text-sm">
-                          {formatCurrency(Number(budget.total_amount))}
-                        </TableCell>
                         <TableCell>
                           <Badge className={`${config.color} border-0 text-[11px]`}>
                             {config.label}

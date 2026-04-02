@@ -3,7 +3,7 @@
 export type UserRole = 'admin' | 'user'
 export type BudgetStatus = 'draft' | 'submitted' | 'under_review' | 'revision' | 'approved' | 'rejected'
 export type NotificationType = 'status_change' | 'revision_request' | 'approval' | 'rejection' | 'info' | 'warning'
-export type DocumentType = 'rab' | 'tor' | 'rkakl' | 'supporting' | 'other'
+export type DocumentType = 'nota_dinas' | 'rka_dpa'
 
 export interface Institution {
   id: string
@@ -20,6 +20,7 @@ export interface Profile {
   id: string
   institution_id: string | null
   role: UserRole
+  admin_role: string | null
   full_name: string
   position: string | null
   phone: string | null
@@ -109,30 +110,12 @@ export interface Budget {
   fiscal_year?: FiscalYear
   submitter?: Profile
   reviewer?: Profile
-  items?: BudgetItem[]
+
   documents?: BudgetDocument[]
   revisions?: Revision[]
 }
 
-export interface BudgetItem {
-  id: string
-  budget_id: string
-  account_code: string | null
-  item_name: string
-  description: string | null
-  specification: string | null
-  quantity: number
-  unit: string
-  unit_price: number
-  total_price: number
-  quantity_before?: number | null
-  unit_before?: string | null
-  unit_price_before?: number | null
-  total_price_before?: number | null
-  sort_order: number
-  created_at: string
-  updated_at: string
-}
+
 
 export interface BudgetDocument {
   id: string
@@ -141,7 +124,7 @@ export interface BudgetDocument {
   file_path: string
   file_type: string
   file_size: number
-  document_type: DocumentType
+  document_type: string
   uploaded_by: string | null
   created_at: string
   // Joined data
@@ -228,9 +211,6 @@ export const statusConfig: Record<BudgetStatus, { label: string; variant: 'defau
 }
 
 export const documentTypeLabels: Record<DocumentType, string> = {
-  rab: 'RAB (Rencana Anggaran Biaya)',
-  tor: 'TOR (Term of Reference)',
-  rkakl: 'RKA-KL',
-  supporting: 'Dokumen Pendukung',
-  other: 'Lainnya',
+  nota_dinas: 'Nota Dinas',
+  rka_dpa: 'RKA/DPA',
 }

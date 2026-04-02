@@ -30,6 +30,7 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [editUser, setEditUser] = useState<Profile | null>(null)
   const [newRole, setNewRole] = useState<UserRole>('user')
+  const [newAdminRole, setNewAdminRole] = useState<string>('superadmin')
 
   useEffect(() => {
     if (!profileLoading && isAdmin) fetchUsers()
@@ -51,14 +52,14 @@ export default function UsersPage() {
     const supabase = createClient()
     const { error } = await supabase
       .from('profiles')
-      .update({ role: newRole })
+      .update({ role: newRole, admin_role: newRole === 'admin' ? newAdminRole : null })
       .eq('id', editUser.id)
 
     if (error) {
       toast.error('Gagal mengubah role')
     } else {
       toast.success(`Role berhasil diubah ke ${newRole}`)
-      setUsers(prev => prev.map(u => u.id === editUser.id ? { ...u, role: newRole } : u))
+      setUsers(prev => prev.map(u => u.id === editUser.id ? { ...u, role: newRole, admin_role: newRole === 'admin' ? newAdminRole : null } : u))
       setEditUser(null)
     }
   }
@@ -122,12 +123,12 @@ export default function UsersPage() {
                       <TableCell className="text-sm text-muted-foreground">{user.position || '-'}</TableCell>
                       <TableCell>
                         <Badge variant={user.role === 'admin' ? 'default' : 'secondary'} className="text-[11px]">
-                          {user.role === 'admin' ? <><Shield className="mr-1 h-3 w-3" />Admin</> : <><UserIcon className="mr-1 h-3 w-3" />User</>}
+                          {user.role === 'admin' ? <><Shield className="mr-1 h-3 w-3" />Admin {user.admin_role && user.admin_role !== 'superadmin' ? `(${user.admin_role})` : ''}</> : <><UserIcon className="mr-1 h-3 w-3" />User</>}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">{formatDate(user.created_at)}</TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="sm" onClick={() => { setEditUser(user); setNewRole(user.role) }}>Ubah</Button>
+                        <Button variant="ghost" size="sm" onClick={() => { setEditUser(user); setNewRole(user.role); setNewAdminRole(user.admin_role || 'superadmin'); }}>Ubah</Button>
                       </TableCell>
                     </TableRow>
                   )
@@ -145,15 +146,34 @@ export default function UsersPage() {
             <DialogTitle>Ubah Role Pengguna</DialogTitle>
             <DialogDescription>{editUser?.full_name}</DialogDescription>
           </DialogHeader>
-          <div className="py-4">
-            <Select value={newRole} onValueChange={(v) => setNewRole(v as UserRole)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="user">User (KPA / Instansi)</SelectItem>
-                <SelectItem value="admin">Admin (PA / Validator)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <p className="text-sm font-medium">Role Utama</p>
+                <Select value={newRole} onValueChange={(v) => setNewRole(v as UserRole)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="user">User (KPA / SKPD)</SelectItem>
+                    <SelectItem value="admin">Admin (Validator)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {newRole === 'admin' && (
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Akses Verifikasi Admin</p>
+                  <Select value={newAdminRole} onValueChange={setNewAdminRole}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="superadmin">Superadmin (Semua Akses)</SelectItem>
+                      <SelectItem value="bapperida">Bapperida</SelectItem>
+                      <SelectItem value="setda">Setda</SelectItem>
+                      <SelectItem value="anggaran">Bidang Anggaran BKAD</SelectItem>
+                      <SelectItem value="aset">Bidang Aset BKAD</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditUser(null)}>Batal</Button>
             <Button onClick={updateRole}>Simpan</Button>
