@@ -123,7 +123,7 @@ export default function SignUpPage() {
               SIVRON<span className="text-sky-500">.</span>
             </h1>
             <p className="font-sans text-base text-white/70 leading-relaxed">
-              Bergabung bersama kami untuk kelola Sistem Verifikasi RKA Online daerah secara transparan.
+              Bergabung bersama kami untuk kelola Sistem Verifikasi RKA Online.
             </p>
 
             <div className="mt-8 inline-flex items-center justify-center gap-2 bg-sky-500/10 text-sky-400 px-5 py-2.5 rounded-full border border-sky-500/20 text-xs font-mono w-full max-w-[280px]">
