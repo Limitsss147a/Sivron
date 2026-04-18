@@ -8,8 +8,8 @@ export default function SignUpSuccessPage() {
     <div className="flex min-h-screen w-full items-center justify-center diamond-pattern bg-white p-6 md:p-10">
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center justify-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-500 font-bold mb-2">
-            <Shield className="h-6 w-6 text-white" />
+          <div className="flex h-12 w-12 items-center justify-center bg-white rounded p-1 shadow-sm mb-2">
+            <Image src="/bpkad-logo.png" alt="BPKAD" width={40} height={40} className="object-contain" />
           </div>
           <div className="text-center">
             <h1 className="font-heading text-3xl font-bold tracking-tighter">
@@ -44,7 +44,7 @@ export default function SignUpSuccessPage() {
             </div>
 
             <div className="pt-4">
-              <Button asChild className="w-full h-14 rounded-xl bg-[#B91C1C] hover:bg-[#991B1B] text-white font-bold tracking-widest uppercase text-sm transition-transform hover:scale-[1.02]">
+              <Button asChild className="w-full h-14 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold tracking-widest uppercase text-sm transition-transform hover:scale-[1.02]">
                 <Link href="/auth/login">
                   LANJUT KE PORTAL LOGIN <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -53,7 +53,7 @@ export default function SignUpSuccessPage() {
 
             <p className="text-center text-xs text-gray-400 mt-4">
               Tidak menerima email? Cek folder spam atau{' '}
-              <Link href="/auth/sign-up" className="text-sky-600 hover:text-red-700 font-medium">
+              <Link href="/auth/sign-up" className="text-sky-600 hover:text-sky-700 font-medium">
                 daftar ulang
               </Link>
             </p>

@@ -42,7 +42,7 @@ export async function updateSession(request: NextRequest) {
 
   // Public/Auth routes that don't require protection
   const isAuthPage = pathname.startsWith('/auth/')
-  const publicRoutes = ['/', '/auth/login', '/auth/sign-up', '/auth/sign-up-success', '/auth/error', '/auth/callback']
+  const publicRoutes = ['/', '/landing', '/auth/login', '/auth/sign-up', '/auth/sign-up-success', '/auth/error', '/auth/callback']
   
   // Logic fix for isPublicRoute: 
   // - If it's in publicRoutes

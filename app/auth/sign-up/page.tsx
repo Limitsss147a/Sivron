@@ -130,7 +130,7 @@ export default function SignUpPage() {
         </div>
 
         <div className="relative z-10">
-           <div className="font-mono text-xs tracking-widest text-sky-500">— SIVRON FISCAL COMMAND CENTER</div>
+           <div className="font-mono text-xs tracking-widest text-sky-500">— SIVRON SISTEM VERIFIKASI RKA ONLINE</div>
         </div>
       </div>
 
@@ -285,7 +285,7 @@ export default function SignUpPage() {
               <span className="text-sm text-gray-500">Sudah punya akun? </span>
               <Link
                 href="/auth/login"
-                className="font-medium text-sm text-sky-600 hover:text-red-700 transition-colors"
+                className="font-medium text-sm text-sky-600 hover:text-sky-700 transition-colors"
                >
                 Masuk disini
               </Link>

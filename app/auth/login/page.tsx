@@ -72,7 +72,7 @@ function LoginForm() {
         </div>
 
         <div className="relative z-10">
-           <div className="font-mono text-xs tracking-widest text-sky-500">— SIVRON FISCAL COMMAND CENTER</div>
+           <div className="font-mono text-xs tracking-widest text-sky-500">— SIVRON SISTEM VERIFIKASI RKA ONLINE</div>
         </div>
       </div>
 

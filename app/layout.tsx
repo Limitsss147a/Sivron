@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
-const fontSans = Plus_Jakarta_Sans({ 
+const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
 })
@@ -21,10 +21,10 @@ const fontMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'SIVRON - Sistem Informasi Anggaran',
+    default: 'SIVRON - Sistem Verifikasi RKA Online',
     template: '%s | SIVRON',
   },
-  description: 'Sistem penganggaran elektronik SIVRON untuk pengelolaan dan pengajuan anggaran pemerintah daerah secara digital, transparan, dan akuntabel.',
+  description: 'Sistem Verifikasi RKA Online SIVRON untuk pengelolaan dan pengajuan anggaran secara digital, transparan, dan akuntabel.',
   keywords: ['sivron', 'e-budgeting', 'penganggaran', 'anggaran', 'pemerintah', 'APBD', 'RAB', 'digital'],
   authors: [{ name: 'SIVRON Team' }],
   generator: 'v0.app',

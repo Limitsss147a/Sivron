@@ -119,7 +119,7 @@ export default function DashboardLayout({
                       SIVRON<span className="text-sky-500 text-xl leading-none">.</span>
                     </span>
                     <span className="truncate text-[9px] font-mono font-bold tracking-widest text-muted-foreground uppercase">
-                      Command Center
+                      Sistem Verifikasi RKA Online
                     </span>
                   </div>
                 </Link>

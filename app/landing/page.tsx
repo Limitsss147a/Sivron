@@ -46,14 +46,14 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#0A0A0F]/50 backdrop-blur-md border-b border-white/5">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded bg-sky-500 text-white font-bold">
-              <Shield className="w-5 h-5" />
+            <div className="flex items-center justify-center w-10 h-10 bg-white rounded p-1 shadow-sm">
+              <Image src="/bpkad-logo.png" alt="BPKAD" width={32} height={32} className="object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading font-bold text-xl tracking-wider uppercase flex items-center">
                 SIVRON<span className="text-sky-500">.</span>
               </span>
-              <span className="text-[10px] tracking-widest text-white/50 uppercase">Fiscal Command Center</span>
+              <span className="text-[10px] tracking-widest text-white/50 uppercase">Sistem Verifikasi RKA Online</span>
             </div>
           </div>
 
@@ -90,12 +90,12 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h2 className="font-mono text-sm tracking-[0.4em] text-sky-500 mb-6">SISTEM INFORMASI ANGGARAN</h2>
+            <h2 className="font-mono text-sm tracking-[0.4em] text-sky-500 mb-6">SISTEM VERIFIKASI RKA ONLINE</h2>
             <h1 className="font-heading text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-4 text-glow transition-all">
               SIVRON<span className="text-sky-500">.</span>
             </h1>
             <p className="font-sans text-lg md:text-xl text-white/60 max-w-2xl mx-auto mt-8 font-light">
-              Platform tata kelola fiskal daerah yang modern, transparan, dan terintegrasi penuh untuk perencanaan hingga pelaporan anggaran.
+              Sistem verifikasi RKA online yang modern, transparan, dan terintegrasi penuh untuk perencanaan hingga pelaporan anggaran.
             </p>
           </motion.div>
         </section>
@@ -143,7 +143,7 @@ export default function LandingPage() {
         {/* Minimal Footer */}
         <footer className="py-8 bg-black border-t border-white/5 text-center">
           <p className="font-mono text-[10px] text-white/30 tracking-widest uppercase">
-            &copy; {new Date().getFullYear()} SIVRON FISCAL COMMAND CENTER - v2.1.0
+            &copy; {new Date().getFullYear()} SIVRON SISTEM VERIFIKASI RKA ONLINE - v2.1.0
           </p>
         </footer>
       </div>
