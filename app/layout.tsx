@@ -21,10 +21,10 @@ const fontMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'SIVRON - Sistem Verifikasi RKA Online',
+    default: 'SIVRON - Sistem Informasi Anggaran',
     template: '%s | SIVRON',
   },
-  description: 'Sistem Verifikasi RKA Online SIVRON untuk pengelolaan dan pengajuan anggaran secara digital, transparan, dan akuntabel.',
+  description: 'Sistem penganggaran elektronik SIVRON untuk pengelolaan dan pengajuan anggaran pemerintah daerah secara digital, transparan, dan akuntabel.',
   keywords: ['sivron', 'e-budgeting', 'penganggaran', 'anggaran', 'pemerintah', 'APBD', 'RAB', 'digital'],
   authors: [{ name: 'SIVRON Team' }],
   generator: 'v0.app',

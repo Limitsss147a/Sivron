@@ -1,13 +1,13 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { Field, FieldLabel, FieldMessage } from '@/components/ui/field'
-import { Shield, Fingerprint, Lock, User, RefreshCw } from 'lucide-react'
+import { Shield, Lock, User, RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -16,12 +16,17 @@ function LoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [captchaState, setCaptchaState] = useState<'idle' | 'verifying' | 'verified'>('idle')
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirectTo = searchParams.get('redirect') || '/dashboard'
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (captchaState !== 'verified') {
+      setError('Harap verifikasi reCAPTCHA terlebih dahulu.')
+      return
+    }
+
     const supabase = createClient()
     setIsLoading(true)
     setError(null)
@@ -32,6 +37,9 @@ function LoginForm() {
         password,
       })
       if (error) throw error
+      // Using router.push immediately after successful auth avoids the loop
+      const params = new URLSearchParams(window.location.search);
+      const redirectTo = params.get('redirect') || '/dashboard';
       router.push(redirectTo)
       router.refresh()
     } catch (error: unknown) {
@@ -107,7 +115,7 @@ function LoginForm() {
                 <FieldLabel htmlFor="password" className="font-bold text-sm text-gray-700 block">
                   Password <span className="text-sky-600">*</span>
                 </FieldLabel>
-                <Link href="#" className="text-xs text-sky-600 hover:text-sky-700 font-medium">Lupa password?</Link>
+                <Link href="/auth/forgot-password" className="text-xs text-sky-600 hover:text-sky-700 font-medium">Lupa password?</Link>
               </div>
               <div className="relative">
                 <Input
@@ -123,11 +131,27 @@ function LoginForm() {
               </div>
             </Field>
 
-            {/* Faux reCAPTCHA for visual matching */}
+            {/* Functional Dummy reCAPTCHA */}
             <div className="flex items-center justify-between p-3 bg-[#f8fbff] border border-gray-200 rounded-xl mt-4">
                <div className="flex items-center gap-3">
-                  <div className="w-5 h-5 border-2 border-gray-300 rounded-sm bg-white cursor-pointer hover:border-sky-500 transition-colors"></div>
-                  <span className="text-xs font-medium text-gray-600">I'm not a robot</span>
+                  <div 
+                    onClick={() => {
+                        if (captchaState !== 'idle') return;
+                        setCaptchaState('verifying')
+                        setTimeout(() => {
+                           setCaptchaState('verified')
+                           setError(null)
+                        }, 1200)
+                    }}
+                    className={`flex items-center justify-center w-6 h-6 border-2 rounded-sm cursor-pointer transition-colors ${
+                      captchaState === 'verified' ? 'bg-green-500 border-green-500' : 
+                      'bg-white border-gray-300 hover:border-sky-500'
+                    }`}
+                  >
+                     {captchaState === 'verifying' && <Spinner className="w-3 h-3 text-sky-500" />}
+                     {captchaState === 'verified' && <div className="text-white font-bold text-xs select-none">✓</div>}
+                  </div>
+                  <span className="text-xs font-medium text-gray-600">Saya bukan robot</span>
                </div>
                <div className="flex flex-col items-center">
                   <RefreshCw className="w-5 h-5 text-sky-500 mb-1" />
@@ -143,8 +167,8 @@ function LoginForm() {
 
             <Button 
               type="submit" 
-              className="w-full h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold tracking-wide text-sm mt-6 transition-all shadow-lg shadow-sky-600/30" 
-              disabled={isLoading}
+              className="w-full h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold tracking-wide text-sm mt-6 transition-all shadow-lg shadow-sky-600/30 disabled:opacity-50" 
+              disabled={isLoading || captchaState !== 'verified'}
             >
               {isLoading ? (
                 <>
