@@ -1,20 +1,32 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Plus_Jakarta_Sans, Space_Grotesk, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const fontSans = Plus_Jakarta_Sans({ 
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+
+const fontHeading = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-heading",
+})
+
+const fontMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+})
 
 export const metadata: Metadata = {
   title: {
-    default: 'E-Budgeting - Sistem Penganggaran Elektronik',
-    template: '%s | E-Budgeting',
+    default: 'SIVRON - Sistem Informasi Anggaran',
+    template: '%s | SIVRON',
   },
-  description: 'Sistem penganggaran elektronik untuk pengelolaan dan pengajuan anggaran pemerintah daerah secara digital, transparan, dan akuntabel.',
-  keywords: ['e-budgeting', 'penganggaran', 'anggaran', 'pemerintah', 'APBD', 'RAB', 'digital'],
-  authors: [{ name: 'E-Budgeting Team' }],
+  description: 'Sistem penganggaran elektronik SIVRON untuk pengelolaan dan pengajuan anggaran pemerintah daerah secara digital, transparan, dan akuntabel.',
+  keywords: ['sivron', 'e-budgeting', 'penganggaran', 'anggaran', 'pemerintah', 'APBD', 'RAB', 'digital'],
+  authors: [{ name: 'SIVRON Team' }],
   generator: 'v0.app',
   icons: {
     icon: [
@@ -53,7 +65,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body className="font-sans antialiased min-h-screen">
+      <body className={`${fontSans.variable} ${fontHeading.variable} ${fontMono.variable} font-sans antialiased min-h-screen`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

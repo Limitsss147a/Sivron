@@ -2,17 +2,9 @@
 
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Spinner } from '@/components/ui/spinner'
-import { FieldGroup, Field, FieldLabel, FieldMessage } from '@/components/ui/field'
+import { Field, FieldLabel, FieldMessage } from '@/components/ui/field'
 import {
   Select,
   SelectContent,
@@ -21,9 +13,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Building2, Lock, Mail, User, ShieldCheck, Briefcase } from 'lucide-react'
+import { Shield, Fingerprint, Lock, User, Mail, Briefcase, Building2 } from 'lucide-react'
 import type { Institution } from '@/lib/types/database'
 
 export default function SignUpPage() {
@@ -107,222 +100,203 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex min-h-screen w-full bg-[#0A0A0F] lg:bg-transparent">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-primary flex-col justify-between p-12 text-primary-foreground">
-        <div>
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 bg-[#0A0A0F] text-white overflow-hidden relative fixed bottom-0 top-0 left-0">
+        <div className="fixed inset-y-0 left-0 w-1/2 pointer-events-none neon-border opacity-50 z-0" />
+        
+        <div className="relative z-10">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-foreground/10">
-              <Building2 className="h-7 w-7" />
+            <div className="flex items-center justify-center w-10 h-10 rounded bg-sky-500 font-bold">
+              <Shield className="w-5 h-5 text-white" />
+            </div>
+            <div className="font-heading font-bold text-lg tracking-widest">PORTAL FISKAL</div>
+          </div>
+        </div>
+
+        <div className="relative z-10 mt-auto mb-32">
+          <h1 className="font-heading text-6xl xl:text-7xl font-bold tracking-tighter mb-4 text-glow">
+            SIVRON<span className="text-sky-500">.</span>
+          </h1>
+          <div className="flex items-center gap-4 mt-8">
+            <div className="flex items-center justify-center w-12 h-12 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-500">
+              <Fingerprint className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">E-Budgeting</h1>
-              <p className="text-sm opacity-80">Sistem Penganggaran Elektronik</p>
+              <div className="font-mono text-xs tracking-[0.2em] uppercase font-bold text-white">SYSTEM REGISTRATION</div>
+              <div className="font-sans text-sm text-white/50 italic mt-1">"Bergabung untuk kelola anggaran digital secara transparan."</div>
             </div>
           </div>
         </div>
 
-        <div className="space-y-8">
-          <div>
-            <h2 className="text-3xl font-bold leading-tight text-balance">
-              Bergabung dengan Sistem E-Budgeting
-            </h2>
-            <p className="mt-4 text-lg opacity-80">
-              Daftar untuk mulai mengajukan dan mengelola anggaran instansi Anda secara digital.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/10">
-                <span className="text-sm font-bold">1</span>
-              </div>
-              <span>Lengkapi data pendaftaran</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/10">
-                <span className="text-sm font-bold">2</span>
-              </div>
-              <span>Verifikasi email</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/10">
-                <span className="text-sm font-bold">3</span>
-              </div>
-              <span>Mulai ajukan anggaran</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 text-sm opacity-60">
-          <ShieldCheck className="h-4 w-4" />
-          <span>Data Anda aman dan terenkripsi</span>
+        <div className="relative z-10">
+           <div className="font-mono text-xs tracking-widest text-sky-500">— SIVRON FISCAL COMMAND CENTER</div>
         </div>
       </div>
 
-      {/* Right Panel - Sign Up Form */}
-      <div className="flex w-full lg:w-1/2 items-center justify-center p-6 md:p-10">
-        <div className="w-full max-w-md">
-          {/* Mobile Logo */}
-          <div className="lg:hidden mb-8 flex items-center justify-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Building2 className="h-6 w-6" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold">E-Budgeting</h1>
-            </div>
+      {/* Right Panel - Form (Diamond Pattern) */}
+      <div className="flex w-full lg:w-1/2 lg:ml-[50%] items-center justify-center p-6 sm:p-12 diamond-pattern bg-white min-h-screen">
+        <div className="w-full max-w-md bg-white/80 backdrop-blur-xl p-8 sm:p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 my-8">
+          
+          <div className="mb-10 lg:hidden">
+             <h1 className="font-heading text-4xl font-bold tracking-tighter">
+              SIVRON<span className="text-sky-500">.</span>
+            </h1>
           </div>
 
-          <Card className="border-0 shadow-lg">
-            <CardHeader className="space-y-1 pb-4">
-              <CardTitle className="text-2xl font-bold">Daftar Akun Baru</CardTitle>
-              <CardDescription>
-                Lengkapi data berikut untuk membuat akun
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSignUp}>
-                <FieldGroup>
-                  <Field>
-                    <FieldLabel htmlFor="fullName">Nama Lengkap</FieldLabel>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="fullName"
-                        type="text"
-                        placeholder="Masukkan nama lengkap"
-                        required
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        className="pl-10"
-                        disabled={isLoading}
-                      />
+          <div className="mb-10">
+            <h2 className="font-heading text-3xl font-bold text-gray-900 mb-2">DAFTAR</h2>
+            <div className="w-12 h-1.5 bg-sky-500 rounded-full"></div>
+            <p className="mt-4 text-sm text-gray-500">Lengkapi data untuk membuat akun SIVRON</p>
+          </div>
+
+          <form onSubmit={handleSignUp} className="space-y-5">
+            <Field>
+              <FieldLabel htmlFor="fullName" className="font-mono text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1 block">Nama Lengkap</FieldLabel>
+              <div className="relative">
+                <Input
+                  id="fullName"
+                  type="text"
+                  placeholder="Masukkan nama lengkap"
+                  required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="pl-10 h-12 bg-gray-50/50 border-gray-200 rounded-xl focus-visible:ring-sky-500 focus-visible:border-sky-500 text-sm"
+                  disabled={isLoading}
+                />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              </div>
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="email" className="font-mono text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1 block">Email</FieldLabel>
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="nama@instansi.go.id"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10 h-12 bg-gray-50/50 border-gray-200 rounded-xl focus-visible:ring-sky-500 focus-visible:border-sky-500 text-sm"
+                  disabled={isLoading}
+                />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              </div>
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="institution" className="font-mono text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1 block">Instansi</FieldLabel>
+              <Select value={institutionId} onValueChange={setInstitutionId} disabled={isLoading || isLoadingInstitutions}>
+                <SelectTrigger id="institution" className="w-full h-12 bg-gray-50/50 border-gray-200 rounded-xl focus:ring-sky-500 focus:border-sky-500">
+                  <Building2 className="ml-1 mr-1.5 h-4 w-4 text-gray-400" />
+                  <SelectValue placeholder={isLoadingInstitutions ? "Memuat..." : "Pilih instansi"} />
+                </SelectTrigger>
+                <SelectContent>
+                  {institutions.length === 0 && !isLoadingInstitutions ? (
+                    <div className="p-4 text-sm text-center text-muted-foreground">
+                      Tidak ada instansi ditemukan.
                     </div>
-                  </Field>
-
-                  <Field>
-                    <FieldLabel htmlFor="email">Email</FieldLabel>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="nama@instansi.go.id"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="pl-10"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </Field>
-
-                  <Field>
-                    <FieldLabel htmlFor="institution">Instansi</FieldLabel>
-                    <Select value={institutionId} onValueChange={setInstitutionId} disabled={isLoading || isLoadingInstitutions}>
-                      <SelectTrigger id="institution" className="w-full">
-                        <Building2 className="mr-2 h-4 w-4 text-muted-foreground" />
-                        <SelectValue placeholder={isLoadingInstitutions ? "Memuat..." : "Pilih instansi"} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {institutions.length === 0 && !isLoadingInstitutions ? (
-                          <div className="p-4 text-sm text-center text-muted-foreground">
-                            Tidak ada instansi ditemukan. <br />
-                            Silakan jalankan seed data atau periksa kebijakan RLS.
-                          </div>
-                        ) : (
-                          institutions.map((inst) => (
-                            <SelectItem key={inst.id} value={inst.id}>
-                              {inst.name} ({inst.code})
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-
-                  <Field>
-                    <FieldLabel htmlFor="position">Jabatan</FieldLabel>
-                    <div className="relative">
-                      <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="position"
-                        type="text"
-                        placeholder="Contoh: Kepala Bagian Keuangan"
-                        value={position}
-                        onChange={(e) => setPosition(e.target.value)}
-                        className="pl-10"
-                        disabled={isLoading}
-                      />
-                    </div>
-                  </Field>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <Field>
-                      <FieldLabel htmlFor="password">Password</FieldLabel>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="password"
-                          type="password"
-                          placeholder="Min. 6 karakter"
-                          required
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="pl-10"
-                          disabled={isLoading}
-                        />
-                      </div>
-                    </Field>
-
-                    <Field>
-                      <FieldLabel htmlFor="repeatPassword">Ulangi Password</FieldLabel>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="repeatPassword"
-                          type="password"
-                          placeholder="Ulangi password"
-                          required
-                          value={repeatPassword}
-                          onChange={(e) => setRepeatPassword(e.target.value)}
-                          className="pl-10"
-                          disabled={isLoading}
-                        />
-                      </div>
-                    </Field>
-                  </div>
-
-                  {error && (
-                    <FieldMessage className="text-destructive bg-destructive/10 p-3 rounded-md">
-                      {error}
-                    </FieldMessage>
+                  ) : (
+                    institutions.map((inst) => (
+                      <SelectItem key={inst.id} value={inst.id}>
+                        {inst.name} ({inst.code})
+                      </SelectItem>
+                    ))
                   )}
+                </SelectContent>
+              </Select>
+            </Field>
 
-                  <Button type="submit" className="w-full h-11" disabled={isLoading}>
-                    {isLoading ? (
-                      <>
-                        <Spinner className="mr-2" />
-                        Memproses...
-                      </>
-                    ) : (
-                      'Daftar Sekarang'
-                    )}
-                  </Button>
-                </FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="position" className="font-mono text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1 block">Jabatan</FieldLabel>
+              <div className="relative">
+                <Input
+                  id="position"
+                  type="text"
+                  placeholder="Contoh: Kepala Bagian"
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  className="pl-10 h-12 bg-gray-50/50 border-gray-200 rounded-xl focus-visible:ring-sky-500 focus-visible:border-sky-500 text-sm"
+                  disabled={isLoading}
+                />
+                <Briefcase className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              </div>
+            </Field>
 
-                <div className="mt-6 text-center text-sm text-muted-foreground">
-                  Sudah punya akun?{' '}
-                  <Link
-                    href="/auth/login"
-                    className="font-medium text-primary hover:underline underline-offset-4"
-                  >
-                    Masuk disini
-                  </Link>
+            <div className="grid grid-cols-2 gap-4">
+              <Field>
+                <FieldLabel htmlFor="password" className="font-mono text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1 block">Password</FieldLabel>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Minimal 6 char"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-9 h-12 bg-gray-50/50 border-gray-200 rounded-xl focus-visible:ring-sky-500 focus-visible:border-sky-500 text-sm"
+                    disabled={isLoading}
+                  />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 </div>
-              </form>
-            </CardContent>
-          </Card>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="repeatPassword" className="font-mono text-[10px] tracking-widest uppercase text-gray-500 font-bold mb-1 block">Ulangi Sandi</FieldLabel>
+                <div className="relative">
+                  <Input
+                    id="repeatPassword"
+                    type="password"
+                    placeholder="Ulangi sandi"
+                    required
+                    value={repeatPassword}
+                    onChange={(e) => setRepeatPassword(e.target.value)}
+                    className="pl-9 h-12 bg-gray-50/50 border-gray-200 rounded-xl focus-visible:ring-sky-500 focus-visible:border-sky-500 text-sm"
+                    disabled={isLoading}
+                  />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                </div>
+              </Field>
+            </div>
+
+            {error && (
+              <FieldMessage className="text-sky-600 bg-sky-50 p-3 rounded-lg border border-sky-100 text-sm mt-4">
+                {error}
+              </FieldMessage>
+            )}
+
+            <Button 
+              type="submit" 
+              className="w-full h-14 rounded-xl bg-[#B91C1C] hover:bg-[#991B1B] text-white font-bold tracking-widest uppercase text-sm mt-8 transition-transform hover:scale-[1.02]" 
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner className="mr-2" />
+                  MEMPROSES...
+                </>
+              ) : (
+                "DAFTAR SEKARANG"
+              )}
+            </Button>
+
+            <div className="mt-6 text-center">
+              <span className="text-sm text-gray-500">Sudah punya akun? </span>
+              <Link
+                href="/auth/login"
+                className="font-medium text-sm text-sky-600 hover:text-red-700 transition-colors"
+               >
+                Masuk disini
+              </Link>
+            </div>
+            
+            <div className="text-center mt-12">
+               <p className="font-mono text-[10px] text-gray-400 tracking-[0.2em] uppercase font-semibold">
+                 SIVRON FISCAL PORTAL
+               </p>
+            </div>
+          </form>
         </div>
       </div>
     </div>

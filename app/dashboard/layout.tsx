@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import { useProfile } from '@/hooks/use-profile'
 import { NotificationBell } from '@/components/notification-bell'
@@ -45,6 +46,7 @@ import {
   ChevronUp,
   Settings,
   Archive,
+  Shield
 } from 'lucide-react'
 
 const userMenuItems = [
@@ -86,9 +88,9 @@ export default function DashboardLayout({
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <Spinner className="h-8 w-8" />
-          <p className="text-sm text-muted-foreground">Memuat...</p>
+        <div className="flex flex-col items-center gap-4">
+          <Spinner className="h-8 w-8 text-sky-500" />
+          <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">Memuat Portal...</p>
         </div>
       </div>
     )
@@ -111,13 +113,13 @@ export default function DashboardLayout({
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
                 <Link href="/dashboard">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                    <Building2 className="h-4 w-4" />
-                  </div>
+                  <div className="flex h-8 w-8 items-center justify-center bg-white rounded-lg p-1 shadow-sm"><Image src="/bpkad-logo.png" alt="BPKAD" width={24} height={24} className="object-contain" /></div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">E-Budgeting</span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      Sistem Anggaran
+                    <span className="truncate font-heading font-bold tracking-wider">
+                      SIVRON<span className="text-sky-500 text-xl leading-none">.</span>
+                    </span>
+                    <span className="truncate text-[9px] font-mono font-bold tracking-widest text-muted-foreground uppercase">
+                      Command Center
                     </span>
                   </div>
                 </Link>
@@ -131,7 +133,7 @@ export default function DashboardLayout({
         {/* Main Navigation */}
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Menu Utama</SidebarGroupLabel>
+            <SidebarGroupLabel className="font-mono text-[10px] tracking-widest uppercase">Menu Utama</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {menuItems.map((item) => (
@@ -147,7 +149,7 @@ export default function DashboardLayout({
                     >
                       <Link href={item.href}>
                         <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
+                        <span className="font-medium text-sm">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -159,7 +161,7 @@ export default function DashboardLayout({
           {/* Admin Management Section */}
           {isAdmin && (
             <SidebarGroup>
-              <SidebarGroupLabel>Manajemen</SidebarGroupLabel>
+              <SidebarGroupLabel className="font-mono text-[10px] tracking-widest uppercase">Manajemen</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {adminManagementItems.map((item) => (
@@ -171,7 +173,7 @@ export default function DashboardLayout({
                       >
                         <Link href={item.href}>
                           <item.icon className="h-4 w-4" />
-                          <span>{item.title}</span>
+                          <span className="font-medium text-sm">{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -190,15 +192,15 @@ export default function DashboardLayout({
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton size="lg">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                      <AvatarFallback className="bg-sky-50 text-sky-600 text-xs font-bold border border-sky-100">
                         {initials}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
+                      <span className="truncate font-bold">
                         {profile?.full_name || 'User'}
                       </span>
-                      <span className="truncate text-xs text-muted-foreground">
+                      <span className="truncate text-xs text-muted-foreground font-medium">
                         {isAdmin ? 'Administrator' : profile?.institution?.name || 'User'}
                       </span>
                     </div>
@@ -212,16 +214,16 @@ export default function DashboardLayout({
                 >
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium">{profile?.full_name}</p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-sm font-bold">{profile?.full_name}</p>
+                      <p className="text-xs font-medium text-muted-foreground">
                         {profile?.position || (isAdmin ? 'Administrator' : 'User')}
                       </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                  <DropdownMenuItem onClick={handleLogout} className="text-sky-600 focus:text-sky-600 font-medium">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Keluar
+                    Keluar Sistem
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -233,27 +235,25 @@ export default function DashboardLayout({
       {/* Main content area */}
       <SidebarInset>
         {/* Top header bar */}
-        <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b bg-white/80 px-4 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 z-20 sticky top-0 shadow-sm">
           <div className="flex items-center gap-2 flex-1">
             <SidebarTrigger className="-ml-1 hidden md:flex" />
             <Separator orientation="vertical" className="mx-2 h-4 hidden md:block" />
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-primary text-primary-foreground md:hidden">
-                <Building2 className="h-3.5 w-3.5" />
-              </div>
-              <h2 className="text-sm font-semibold text-foreground tracking-tight">
-                E-Budgeting
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex h-7 w-7 items-center justify-center bg-white rounded p-0.5 shadow-sm md:hidden"><Image src="/bpkad-logo.png" alt="BPKAD" width={20} height={20} className="object-contain" /></div>
+              <h2 className="text-sm font-heading font-bold text-gray-900 tracking-wider flex items-center">
+                SIVRON<span className="text-sky-500">.</span>
               </h2>
-              <Separator orientation="vertical" className="mx-1 h-3 hidden sm:block" />
-              <span className="text-xs font-medium text-muted-foreground hidden sm:block">
+              <Separator orientation="vertical" className="mx-2 h-4 hidden sm:block" />
+              <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase hidden sm:block font-bold mt-1">
                 {new Intl.DateTimeFormat('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date())}
               </span>
             </div>
           </div>
           
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="flex text-right mr-1 sm:mr-2">
-              <p className="text-xs font-medium leading-none truncate max-w-[80px] sm:max-w-[150px]">
+          <div className="flex items-center gap-3">
+            <div className="flex text-right mr-1 sm:mr-3">
+              <p className="text-xs font-bold leading-none truncate max-w-[80px] sm:max-w-[150px] mt-0.5">
                 Halo, {profile?.full_name?.split(' ')[0] || 'User'}
               </p>
             </div>
@@ -262,7 +262,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <div className="flex-1 overflow-auto p-4 pb-24 md:p-6 md:pb-6">
+        <div className="flex-1 overflow-auto bg-gray-50/50 p-4 pb-24 md:p-8 md:pb-8">
           {children}
         </div>
       </SidebarInset>

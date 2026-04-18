@@ -32,8 +32,11 @@ import {
   TrendingUp,
   Building2,
   ArrowUpRight,
+  Shield,
+  Activity
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
 interface DashboardStats {
@@ -130,34 +133,38 @@ export default function DashboardPage() {
           title: 'Total Pengajuan',
           value: stats?.total || 0,
           icon: FileText,
-          description: 'Seluruh pengajuan anggaran',
-          color: 'text-chart-1',
-          bg: 'bg-chart-1/10',
+          description: 'Seluruh pengajuan',
+          color: 'text-blue-600',
+          bg: 'bg-blue-50 border-blue-100',
+          gradient: 'from-blue-500',
         },
         {
-          title: 'Menunggu Verifikasi',
+          title: 'Perlu Verifikasi',
           value: (stats?.submitted || 0) + (stats?.underReview || 0),
           icon: Clock,
-          description: 'Perlu ditinjau',
-          color: 'text-chart-3',
-          bg: 'bg-chart-3/10',
+          description: 'Menunggu ditinjau',
+          color: 'text-amber-600',
+          bg: 'bg-amber-50 border-amber-100',
+          gradient: 'from-amber-500',
         },
         {
-          title: 'Disetujui',
+          title: 'Telah Disetujui',
           value: stats?.approved || 0,
           icon: CheckCircle2,
           description: formatCurrency(stats?.approvedAmount || 0),
-          color: 'text-chart-2',
-          bg: 'bg-chart-2/10',
+          color: 'text-emerald-600',
+          bg: 'bg-emerald-50 border-emerald-100',
+          gradient: 'from-emerald-500',
         },
         {
-          title: 'Total Anggaran',
+          title: 'SIVRON Total Anggaran',
           value: formatCompactNumber(stats?.totalAmount || 0),
-          icon: TrendingUp,
-          description: 'Seluruh pengajuan',
-          color: 'text-primary',
-          bg: 'bg-primary/10',
+          icon: Shield,
+          description: 'Seluruh alokasi tercatat',
+          color: 'text-sky-600',
+          bg: 'bg-sky-50 border-sky-100',
           isText: true,
+          gradient: 'from-sky-600',
         },
       ]
     : [
@@ -166,92 +173,104 @@ export default function DashboardPage() {
           value: stats?.total || 0,
           icon: FileText,
           description: 'Pengajuan Anda',
-          color: 'text-chart-1',
-          bg: 'bg-chart-1/10',
+          color: 'text-blue-600',
+          bg: 'bg-blue-50 border-blue-100',
+          gradient: 'from-blue-500',
         },
         {
           title: 'Disetujui',
           value: stats?.approved || 0,
           icon: CheckCircle2,
           description: formatCurrency(stats?.approvedAmount || 0),
-          color: 'text-chart-2',
-          bg: 'bg-chart-2/10',
+          color: 'text-emerald-600',
+          bg: 'bg-emerald-50 border-emerald-100',
+          gradient: 'from-emerald-500',
         },
         {
           title: 'Perlu Revisi',
           value: stats?.revision || 0,
           icon: AlertCircle,
-          description: 'Segera perbaiki',
-          color: 'text-chart-4',
-          bg: 'bg-chart-4/10',
+          description: 'Segera perbaiki proposal',
+          color: 'text-amber-600',
+          bg: 'bg-amber-50 border-amber-100',
+          gradient: 'from-amber-500',
         },
         {
           title: 'Ditolak',
           value: stats?.rejected || 0,
           icon: XCircle,
           description: 'Tidak dapat diproses',
-          color: 'text-destructive',
-          bg: 'bg-destructive/10',
+          color: 'text-red-600',
+          bg: 'bg-red-50 border-red-100',
+          gradient: 'from-red-600',
         },
       ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-in fade-in duration-500">
       {/* Page Header */}
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Selamat datang, {profile?.full_name?.split(' ')[0]}!
+          <div className="flex items-center gap-2 mb-2">
+            <Activity className="h-5 w-5 text-sky-500" />
+            <h1 className="font-heading text-3xl font-bold tracking-tight text-gray-900">Portal Dashboard</h1>
+          </div>
+          <p className="text-muted-foreground font-medium flex items-center">
+            Selamat datang, <span className="text-gray-900 font-bold ml-1 mr-1">{profile?.full_name?.split(' ')[0]}!</span>
             {profile?.institution?.name && (
-              <span className="ml-1 text-foreground/70">— {profile.institution.name}</span>
+               <span className="hidden sm:inline-flex items-center text-xs font-mono uppercase bg-gray-100 px-2 py-0.5 rounded text-gray-600 ml-2">
+                  <Building2 className="w-3 h-3 mr-1" /> {profile.institution.name}
+               </span>
             )}
           </p>
         </div>
         {!isAdmin && (
-          <Button asChild>
+          <Button asChild className="rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-bold h-11 transition-all shadow-sm">
             <Link href="/dashboard/budgets/new">
               <FileText className="mr-2 h-4 w-4" />
-              Buat Pengajuan
+              BUAT PENGAJUAN BARU
             </Link>
           </Button>
         )}
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-        {statCards.map((card) => (
-          <Card key={card.title} className="relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2 sm:p-6 sm:pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground line-clamp-1">
+      <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        {statCards.map((card, index) => (
+          <Card key={card.title} className="relative overflow-hidden group hover:shadow-lg transition-all duration-300 border-none bg-white shadow-sm rounded-2xl">
+            {/* Left Accent Strip */}
+            <div className={`absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b ${card.gradient} to-transparent opacity-80`} />
+            
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-5 pb-3">
+              <CardTitle className="text-xs sm:text-[11px] uppercase font-bold tracking-widest text-muted-foreground line-clamp-1">
                 {card.title}
               </CardTitle>
-              <div className={`rounded-lg p-1.5 sm:p-2 ${card.bg}`}>
-                <card.icon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${card.color}`} />
+              <div className={`rounded-xl p-2 ${card.bg} border transition-transform group-hover:scale-110 duration-300`}>
+                <card.icon className={`h-4 w-4 ${card.color}`} />
               </div>
             </CardHeader>
-            <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
-              <div className="text-lg sm:text-2xl font-bold truncate">
+            <CardContent className="p-5 pt-0">
+              <div className="font-heading text-2xl sm:text-3xl font-bold truncate tracking-tight text-gray-900">
                 {card.isText ? card.value : card.value.toLocaleString('id-ID')}
               </div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1 line-clamp-1">{card.description}</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground mt-1.5 font-medium line-clamp-1">{card.description}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
       {/* Charts & Table Row */}
-      <div className="flex overflow-x-auto pb-6 pt-2 gap-4 -mx-4 px-4 snap-x snap-mandatory lg:grid lg:grid-cols-5 lg:overflow-visible lg:p-0 lg:mx-0 lg:flex-none hide-scrollbar">
+      <div className="flex overflow-x-auto pb-6 pt-2 gap-6 -mx-4 px-4 snap-x snap-mandatory lg:grid lg:grid-cols-5 lg:overflow-visible lg:p-0 lg:mx-0 lg:flex-none hide-scrollbar">
         {/* Status Chart */}
         <div className="w-[85vw] max-w-sm shrink-0 snap-center lg:w-auto lg:max-w-none lg:col-span-2">
-          <Card className="h-full relative overflow-hidden">
-            <CardHeader className="p-4 sm:p-6">
-            <CardTitle className="text-base">Status Pengajuan</CardTitle>
-            <CardDescription>Distribusi status anggaran</CardDescription>
+          <Card className="h-full relative overflow-hidden border-none shadow-sm rounded-2xl">
+            <CardHeader className="p-5 sm:p-6 pb-2">
+            <CardTitle className="font-heading text-lg font-bold">Status Pengajuan</CardTitle>
+            <CardDescription className="text-xs font-medium">Distribusi status anggaran</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             {statusData.length > 0 ? (
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <ChartContainer config={statusChartConfig} className="mx-auto aspect-square max-h-[220px]">
                   <PieChart>
                     <ChartTooltip content={<ChartTooltipContent />} />
@@ -261,29 +280,31 @@ export default function DashboardPage() {
                       nameKey="status"
                       cx="50%"
                       cy="50%"
-                      innerRadius={50}
-                      outerRadius={80}
-                      paddingAngle={3}
+                      innerRadius={60}
+                      outerRadius={85}
+                      paddingAngle={4}
+                      stroke="transparent"
                     >
                       {statusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                        <Cell key={`cell-${index}`} fill={entry.fill} className="hover:opacity-80 transition-opacity" />
                       ))}
                     </Pie>
                   </PieChart>
                 </ChartContainer>
-                <div className="flex flex-wrap gap-3 justify-center">
+                <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center">
                   {statusData.map((d) => (
-                    <div key={d.status} className="flex items-center gap-1.5 text-xs">
+                    <div key={d.status} className="flex items-center gap-2 text-xs">
                       <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: d.fill }} />
-                      <span className="text-muted-foreground">{d.status}</span>
-                      <span className="font-semibold">{d.count}</span>
+                      <span className="text-muted-foreground font-medium">{d.status}</span>
+                      <span className="font-bold text-gray-900">{d.count}</span>
                     </div>
                   ))}
                 </div>
               </div>
             ) : (
-              <div className="flex h-[220px] items-center justify-center text-sm text-muted-foreground">
-                Belum ada data pengajuan
+              <div className="flex h-[250px] items-center justify-center flex-col text-sm text-muted-foreground">
+                 <PieChart className="w-12 h-12 text-gray-200 mb-2" />
+                 <p className="font-medium">Belum ada statistik</p>
               </div>
             )}
           </CardContent>
@@ -292,56 +313,58 @@ export default function DashboardPage() {
 
         {/* Recent Budgets Table */}
         <div className="w-[85vw] shrink-0 snap-center lg:w-auto lg:col-span-3">
-          <Card className="h-full relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-6">
+          <Card className="h-full relative overflow-hidden border-none shadow-sm rounded-2xl">
+            <CardHeader className="flex flex-row items-center justify-between p-5 sm:p-6 pb-4 border-b border-gray-50">
             <div>
-              <CardTitle className="text-base">Pengajuan Terbaru</CardTitle>
-              <CardDescription>
-                {isAdmin ? 'Pengajuan terbaru dari seluruh instansi' : 'Pengajuan anggaran terbaru Anda'}
+              <CardTitle className="font-heading text-lg font-bold">Aktivitas Terbaru</CardTitle>
+              <CardDescription className="text-xs font-medium mt-1">
+                {isAdmin ? 'Pengajuan terbaru dari seluruh instansi' : 'Track record dokumen Anda'}
               </CardDescription>
             </div>
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="sm" className="hidden sm:inline-flex rounded-lg h-8 text-xs font-bold uppercase tracking-widest text-gray-500" asChild>
               <Link href={isAdmin ? '/dashboard/review' : '/dashboard/budgets'}>
-                Lihat Semua
-                <ArrowUpRight className="ml-1 h-3 w-3" />
+                Semua
+                <ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
               </Link>
             </Button>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {recentBudgets.length > 0 ? (
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Judul</TableHead>
-                    {isAdmin && <TableHead>Instansi</TableHead>}
-                    <TableHead>Status</TableHead>
+                  <TableRow className="hover:bg-transparent border-gray-50 bg-gray-50/50">
+                    <TableHead className="font-mono text-[10px] uppercase font-bold tracking-wider text-gray-500 pl-6 h-10">Dokumen</TableHead>
+                    {isAdmin && <TableHead className="font-mono text-[10px] uppercase font-bold tracking-wider text-gray-500 h-10">Instansi</TableHead>}
+                    <TableHead className="font-mono text-[10px] uppercase font-bold tracking-wider text-gray-500 text-right pr-6 h-10">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {recentBudgets.map((budget) => {
                     const config = statusConfig[budget.status as BudgetStatus]
                     return (
-                      <TableRow key={budget.id}>
-                        <TableCell>
+                      <TableRow key={budget.id} className="group hover:bg-gray-50/80 transition-colors border-gray-50">
+                        <TableCell className="pl-6 py-4">
                           <Link
                             href={`/dashboard/${isAdmin ? 'review' : 'budgets'}/${budget.id}`}
-                            className="font-medium hover:underline underline-offset-4"
+                            className="font-bold text-sm text-gray-900 group-hover:text-sky-600 transition-colors"
                           >
                             {budget.title}
                           </Link>
-                          <p className="text-xs text-muted-foreground mt-0.5">
+                          <p className="text-[11px] font-mono text-muted-foreground mt-1 uppercase">
                             {formatDate(budget.updated_at)}
                           </p>
                         </TableCell>
                         {isAdmin && (
-                          <TableCell className="text-sm text-muted-foreground">
+                          <TableCell className="text-xs font-medium text-gray-600 py-4 max-w-[150px] truncate">
                             {(budget as any).institution?.name || '-'}
                           </TableCell>
                         )}
-                        <TableCell>
-                          <Badge className={`${config.color} border-0 text-[11px]`}>
-                            {config.label}
-                          </Badge>
+                        <TableCell className="text-right pr-6 py-4">
+                           <div className="flex justify-end">
+                             <Badge className={`${config.color} border-0 text-[10px] font-bold px-2.5 py-0.5 rounded-sm uppercase tracking-wider`}>
+                               {config.label}
+                             </Badge>
+                           </div>
                         </TableCell>
                       </TableRow>
                     )
@@ -349,16 +372,17 @@ export default function DashboardPage() {
                 </TableBody>
               </Table>
             ) : (
-              <div className="flex h-32 items-center justify-center text-sm text-muted-foreground">
-                <div className="text-center">
-                  <FileText className="mx-auto h-8 w-8 mb-2 opacity-50" />
-                  <p>Belum ada pengajuan</p>
-                  {!isAdmin && (
-                    <Button variant="link" size="sm" asChild className="mt-1">
-                      <Link href="/dashboard/budgets/new">Buat pengajuan pertama</Link>
-                    </Button>
-                  )}
+              <div className="flex flex-col h-[280px] items-center justify-center text-sm text-muted-foreground p-6">
+                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                  <FileText className="h-8 w-8 text-gray-300" />
                 </div>
+                <p className="font-medium text-gray-900">Belum ada dokumen</p>
+                <p className="text-xs mt-1">Daftar ini akan menampilkan pengajuan terbaru</p>
+                {!isAdmin && (
+                  <Button asChild className="mt-6 rounded-lg font-bold bg-gray-900 text-white h-10 px-6">
+                    <Link href="/dashboard/budgets/new">Kirim Proposal Pertama</Link>
+                  </Button>
+                )}
               </div>
             )}
           </CardContent>
@@ -371,35 +395,41 @@ export default function DashboardPage() {
 
 function DashboardSkeleton() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-pulse">
       <div>
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-4 w-72 mt-2" />
+        <Skeleton className="h-8 w-64 rounded-lg bg-gray-200" />
+        <Skeleton className="h-4 w-72 mt-3 rounded-md bg-gray-100" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[...Array(4)].map((_, i) => (
-          <Card key={i}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-8 w-8 rounded-lg" />
+          <Card key={i} className="border-none shadow-sm rounded-2xl">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-5">
+              <Skeleton className="h-3 w-24 rounded bg-gray-100" />
+              <Skeleton className="h-8 w-8 rounded-xl bg-gray-100" />
             </CardHeader>
-            <CardContent>
-              <Skeleton className="h-7 w-16" />
-              <Skeleton className="h-3 w-32 mt-2" />
+            <CardContent className="p-5 pt-0">
+              <Skeleton className="h-8 w-20 rounded-md bg-gray-200" />
+              <Skeleton className="h-3 w-32 mt-3 rounded bg-gray-100" />
             </CardContent>
           </Card>
         ))}
       </div>
       <div className="grid gap-6 lg:grid-cols-5">
-        <Card className="lg:col-span-2">
-          <CardHeader><Skeleton className="h-5 w-32" /></CardHeader>
-          <CardContent><Skeleton className="h-[220px] rounded-lg" /></CardContent>
+        <Card className="lg:col-span-2 border-none shadow-sm rounded-2xl">
+          <CardHeader className="p-5"><Skeleton className="h-5 w-40 rounded bg-gray-200" /></CardHeader>
+          <CardContent className="p-6"><Skeleton className="h-[220px] rounded-full mx-auto max-w-[220px] bg-gray-100" /></CardContent>
         </Card>
-        <Card className="lg:col-span-3">
-          <CardHeader><Skeleton className="h-5 w-40" /></CardHeader>
-          <CardContent>
+        <Card className="lg:col-span-3 border-none shadow-sm rounded-2xl">
+          <CardHeader className="p-5"><Skeleton className="h-5 w-48 rounded bg-gray-200" /></CardHeader>
+          <CardContent className="p-0">
             {[...Array(5)].map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full mb-2" />
+              <div key={i} className="px-6 py-4 border-t border-gray-50 flex justify-between items-center">
+                 <div>
+                    <Skeleton className="h-4 w-48 mb-2 bg-gray-200 rounded" />
+                    <Skeleton className="h-3 w-24 bg-gray-100 rounded" />
+                 </div>
+                 <Skeleton className="h-6 w-16 bg-gray-100 rounded-sm" />
+              </div>
             ))}
           </CardContent>
         </Card>

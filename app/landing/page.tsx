@@ -3,77 +3,149 @@
 import { DottedSurface } from "@/components/ui/dotted-surface"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Shield, BarChart3, FileText, Users } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+import { motion } from "framer-motion"
+
+const features = [
+  {
+    icon: FileText,
+    title: "PENGAJUAN DIGITAL",
+    description: "Sistem pengajuan anggaran yang sepenuhnya digital, memangkas proses birokrasi."
+  },
+  {
+    icon: BarChart3,
+    title: "MONITORING REAL-TIME",
+    description: "Pantau serapan dan status anggaran secara langsung melalui dashboard interaktif."
+  },
+  {
+    icon: Shield,
+    title: "KEAMANAN DATA",
+    description: "Terenkripsi dengan teknologi mutakhir untuk menjamin kerahasiaan data fiskal."
+  },
+  {
+    icon: Users,
+    title: "MANAJEMEN PENGGUNA",
+    description: "Sistem hak akses dan verifikasi bertingkat untuk transparansi dan akuntabilitas."
+  }
+]
 
 export default function LandingPage() {
   return (
-    <main className="dark relative min-h-screen w-full overflow-hidden bg-black flex flex-col items-center justify-center">
-      {/* Three.js Dotted Surface */}
-      <DottedSurface className="size-full" forceDark />
+    <main className="dark relative min-h-screen w-full bg-[#0A0A0F] text-white selection:bg-sky-500/30">
+      {/* Neon Glow Frame */}
+      <div className="fixed inset-0 pointer-events-none z-50 neon-border opacity-50" />
 
-      {/* Background Image (Very subtle blur for texture) */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-20 transition-opacity duration-1000">
-        <Image
-          src="/landing-assets/bg-logo.png"
-          alt="Background Texture"
-          fill
-          className="object-cover blur-3xl scale-110"
-        />
+      {/* Three.js Dotted Surface Background */}
+      <div className="fixed inset-0 z-0">
+        <DottedSurface className="size-full" forceDark />
       </div>
 
-      {/* Radial Gradient Glow like template */}
-      <div
-        aria-hidden="true"
-        className={cn(
-          'pointer-events-none absolute top-1/2 left-1/2 size-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full',
-          'bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08),transparent_60%)]',
-          'blur-[60px]',
-          'z-[1]'
-        )}
-      />
-
-      {/* Main Content Area */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4">
-        {/* Minimalist Logo */}
-        <div className="mb-12 animate-in fade-in zoom-in duration-1000">
-          <div className="relative w-20 h-20 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md p-4 shadow-2xl">
-            <Image
-              src="/landing-assets/bg-logo.png"
-              alt="Logo"
-              fill
-              className="object-contain p-3"
-            />
+      {/* Header Navigation */}
+      <header className="fixed top-0 left-0 right-0 z-40 bg-[#0A0A0F]/50 backdrop-blur-md border-b border-white/5">
+        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded bg-sky-500 text-white font-bold">
+              <Shield className="w-5 h-5" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-heading font-bold text-xl tracking-wider uppercase flex items-center">
+                SIVRON<span className="text-sky-500">.</span>
+              </span>
+              <span className="text-[10px] tracking-widest text-white/50 uppercase">Fiscal Command Center</span>
+            </div>
           </div>
-        </div>
 
-        {/* Scaled Title like Template */}
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-          <h1 className="font-mono text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-2">
-            E-BUDGETING
-          </h1>
-          <p className="font-mono text-sm md:text-base text-white/40 tracking-[0.3em] uppercase">
-            Sistem Informasi Anggaran Daerah
-          </p>
-        </div>
+          <nav className="hidden md:flex items-center gap-8">
+            <Link href="#portal" className="text-xs font-mono tracking-widest hover:text-sky-500 transition-colors">PORTAL</Link>
+            <Link href="#presence" className="text-xs font-mono tracking-widest hover:text-sky-500 transition-colors">PRESENCE</Link>
+          </nav>
 
-        {/* Clean CTA */}
-        <div className="mt-16 animate-in fade-in slide-in-from-bottom-12 duration-700 delay-500">
-          <Button asChild size="lg" className="h-12 px-10 rounded-full bg-white text-black hover:bg-white/90 font-mono text-sm transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            <Link href="/auth/login" className="flex items-center">
-              GET STARTED
-              <ArrowRight className="ml-3 h-4 w-4" />
-            </Link>
+          <Button asChild className="rounded-full bg-white text-black hover:bg-gray-200 uppercase tracking-widest text-xs px-6 h-10 font-bold transition-transform hover:scale-105">
+            <Link href="/auth/login">Akses Portal</Link>
           </Button>
         </div>
-      </div>
+      </header>
 
-      {/* Footer Info */}
-      <div className="absolute bottom-10 left-0 w-full flex justify-center z-10 pointer-events-none animate-in fade-in duration-1000 delay-1000">
-        <p className="font-mono text-[10px] text-white/20 tracking-widest uppercase">
-          &copy; {new Date().getFullYear()} PEMDA - v2.0.4.8
-        </p>
+      {/* Main Content Scrollable Area */}
+      <div className="relative z-10 w-full pt-20">
+        
+        {/* Hero Section */}
+        <section id="portal" className="min-h-[85vh] flex flex-col items-center justify-center relative px-4">
+          {/* Subtle Radial Glow */}
+          <div
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute top-1/2 left-1/2 size-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full',
+              'bg-[radial-gradient(ellipse_at_center,rgba(239,68,68,0.1),transparent_60%)]',
+              'blur-[60px]',
+              '-z-10'
+            )}
+          />
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <h2 className="font-mono text-sm tracking-[0.4em] text-sky-500 mb-6">SISTEM INFORMASI ANGGARAN</h2>
+            <h1 className="font-heading text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-4 text-glow transition-all">
+              SIVRON<span className="text-sky-500">.</span>
+            </h1>
+            <p className="font-sans text-lg md:text-xl text-white/60 max-w-2xl mx-auto mt-8 font-light">
+              Platform tata kelola fiskal daerah yang modern, transparan, dan terintegrasi penuh untuk perencanaan hingga pelaporan anggaran.
+            </p>
+          </motion.div>
+        </section>
+
+        {/* Presence / Features Section */}
+        <section id="presence" className="min-h-screen py-24 bg-gradient-to-b from-transparent to-[#0A0A0F] relative px-6">
+          <div className="container mx-auto max-w-6xl">
+            <div className="mb-16 flex items-center gap-4">
+              <span className="w-12 h-[1px] bg-sky-500" />
+              <h3 className="font-mono text-sm tracking-[0.3em] text-sky-500">KAPABILITAS SISTEM</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {features.map((feature, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                >
+                  <div className="group glass-card h-full p-8 rounded-2xl hover:border-sky-500/30 transition-all duration-300">
+                    <feature.icon className="w-8 h-8 text-white/40 mb-6 group-hover:text-sky-500 transition-colors" />
+                    <h4 className="font-heading font-bold text-lg mb-3 tracking-wide">{feature.title}</h4>
+                    <p className="text-white/50 text-sm leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* Call to Action Footer */}
+        <section className="py-24 relative bg-[#050508] flexflex-col items-center justify-center text-center px-4 border-t border-white/5">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold mb-8">Siap Mengelola Anggaran?</h2>
+          <Button asChild className="rounded-full bg-sky-500 hover:bg-sky-600 text-white font-bold h-14 px-10 text-sm tracking-widest transition-transform hover:scale-105 neon-border-sky">
+            <Link href="/auth/login" className="flex items-center">
+              BUKA AKSES PORTAL <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
+          </Button>
+        </section>
+
+        {/* Minimal Footer */}
+        <footer className="py-8 bg-black border-t border-white/5 text-center">
+          <p className="font-mono text-[10px] text-white/30 tracking-widest uppercase">
+            &copy; {new Date().getFullYear()} SIVRON FISCAL COMMAND CENTER - v2.1.0
+          </p>
+        </footer>
       </div>
     </main>
   )
