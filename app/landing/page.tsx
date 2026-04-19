@@ -10,7 +10,7 @@ import { motion } from "framer-motion"
 
 export default function LandingPage() {
   return (
-    <main className="dark relative min-h-screen w-full bg-[#0A0A0F] text-white selection:bg-sky-500/30">
+    <main className="dark relative min-h-screen w-full bg-[#0A0A0F] text-white selection:bg-sky-500/30 overflow-x-hidden">
       {/* Neon Glow Frame */}
       <div className="fixed inset-0 pointer-events-none z-50 neon-border opacity-50" />
 
@@ -22,15 +22,15 @@ export default function LandingPage() {
       {/* Header Navigation */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#0A0A0F]/50 backdrop-blur-md border-b border-white/5">
         <div className="container mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 bg-white rounded p-1 shadow-sm">
-              <Image src="/logo-anggaran-2.jpeg" alt="SIVRON" width={32} height={32} className="object-contain rounded-lg" />
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-white rounded p-1 shadow-sm">
+              <Image src="/logo-anggaran-2.jpeg" alt="SIVRON" width={32} height={32} className="object-contain rounded-lg w-full h-full" />
             </div>
             <div className="flex flex-col">
-              <span className="font-heading font-bold text-xl tracking-wider uppercase flex items-center">
+              <span className="font-heading font-bold text-lg md:text-xl tracking-wider uppercase flex items-center">
                 SIVRON<span className="text-sky-500">.</span>
               </span>
-              <span className="text-[10px] tracking-widest text-white/50 uppercase">Sistem Verifikasi RKA Online</span>
+              <span className="text-[10px] tracking-widest text-white/50 uppercase hidden sm:block">Sistem Verifikasi RKA Online</span>
             </div>
           </div>
 
@@ -39,7 +39,7 @@ export default function LandingPage() {
             <Link href="#presence" className="text-xs font-mono tracking-widest hover:text-sky-500 transition-colors">PRESENCE</Link>
           </nav>
 
-          <Button asChild className="rounded-full bg-white text-black hover:bg-gray-200 uppercase tracking-widest text-[10px] md:text-xs px-4 md:px-6 h-8 md:h-10 font-bold transition-transform hover:scale-105">
+          <Button asChild className="rounded-full bg-white text-black hover:bg-gray-200 uppercase tracking-widest text-[9px] sm:text-[10px] md:text-xs px-3 sm:px-4 md:px-6 h-7 sm:h-8 md:h-10 font-bold transition-transform hover:scale-105 shrink-0">
             <Link href="/auth/login">Akses Portal</Link>
           </Button>
         </div>

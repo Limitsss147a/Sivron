@@ -100,15 +100,16 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center p-4 md:p-8 bg-[#f8fbff] relative diamond-pattern">
+    <div className="flex min-h-screen w-full items-center justify-center p-4 pt-24 md:p-8 bg-[#f8fbff] relative diamond-pattern overflow-x-hidden">
       {/* BKAD Logo Absolute Overlay */}
-      <div className="absolute top-6 left-6 md:top-8 md:left-8 z-20 flex items-center gap-3 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm border border-gray-100">
-        <Image src="/bpkad-logo.png" alt="BKAD Logo" width={32} height={32} className="object-contain" />
-        <span className="font-heading font-bold text-gray-800 text-sm hidden sm:block tracking-wide">SIVRON — BKAD</span>
+      <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20 flex items-center gap-2 md:gap-3 bg-white/80 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm border border-gray-100">
+        <Image src="/bpkad-logo.png" alt="BKAD Logo" width={24} height={24} className="object-contain md:w-[32px] md:h-[32px]" />
+        <span className="font-heading font-bold text-gray-800 text-xs md:text-sm tracking-wide">SIVRON</span>
+        <span className="font-heading font-bold text-gray-800 text-xs md:text-sm hidden sm:block tracking-wide">— BKAD</span>
       </div>
 
       {/* Floating Centered Card */}
-      <div className="flex w-full max-w-5xl mt-16 md:mt-0 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden min-h-[600px] md:min-h-[650px] relative z-10 border border-gray-100/50">
+      <div className="flex w-full max-w-5xl bg-white rounded-2xl md:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden min-h-[500px] md:min-h-[650px] relative z-10 border border-gray-100/50">
         
         {/* Left Panel - Dark SIVRON Branding replacing old E-budgeting */}
         <div className="hidden lg:flex flex-col w-1/2 p-12 bg-[#0A0A0F] text-white overflow-hidden relative justify-center items-center">

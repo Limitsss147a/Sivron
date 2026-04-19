@@ -65,7 +65,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning>
-      <body className={`${fontSans.variable} ${fontHeading.variable} ${fontMono.variable} font-sans antialiased min-h-screen`}>
+      <body className={`${fontSans.variable} ${fontHeading.variable} ${fontMono.variable} font-sans antialiased min-h-screen w-full overflow-x-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
