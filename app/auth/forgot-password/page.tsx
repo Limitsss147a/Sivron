@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
     <div className="flex min-h-screen w-full items-center justify-center p-4 pt-24 md:p-8 bg-[#f8fbff] relative diamond-pattern overflow-x-hidden">
       {/* BKAD Logo Absolute Overlay */}
       <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20 flex items-center gap-2 md:gap-3 bg-white/80 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm border border-gray-100">
-        <Image src="/bpkad-logo.png" alt="BKAD Logo" width={24} height={24} className="object-contain md:w-[32px] md:h-[32px]" />
+        <Image src="/bpkad-logo.jpeg" alt="BKAD Logo" width={24} height={24} className="object-contain md:w-[32px] md:h-[32px]" />
         <span className="font-heading font-bold text-gray-800 text-xs md:text-sm tracking-wide">SIVRON</span>
         <span className="font-heading font-bold text-gray-800 text-xs md:text-sm hidden sm:block tracking-wide">— BKAD</span>
       </div>
@@ -88,9 +88,9 @@ export default function ForgotPasswordPage() {
             </FieldMessage>
           )}
 
-          <Button 
-            type="submit" 
-            className="w-full h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold tracking-wide text-sm mt-6 transition-all shadow-lg shadow-sky-600/30 disabled:opacity-50" 
+          <Button
+            type="submit"
+            className="w-full h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold tracking-wide text-sm mt-6 transition-all shadow-lg shadow-sky-600/30 disabled:opacity-50"
             disabled={isLoading || !!success}
           >
             {isLoading ? (
@@ -102,12 +102,12 @@ export default function ForgotPasswordPage() {
               "KIRIM TAUTAN"
             )}
           </Button>
-          
+
           <div className="mt-8 text-center text-sm">
             <Link
               href="/auth/login"
               className="font-bold text-gray-500 hover:text-sky-600 transition-colors inline-flex items-center gap-2"
-             >
+            >
               <ArrowLeft className="w-4 h-4" /> Kembali ke Login
             </Link>
           </div>

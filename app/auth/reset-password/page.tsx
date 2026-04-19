@@ -19,28 +19,28 @@ export default function ResetPasswordPage() {
   const router = useRouter()
 
   useEffect(() => {
-     // Validate that user is in an active recovery session
-     const checkSession = async () => {
-         const supabase = createClient()
-         const { data: { session } } = await supabase.auth.getSession()
-         if (!session) {
-             setError("Link tautan sudah tidak berlaku atau Anda tidak login dalam mode recovery. Silakan ajukan ulang lupa password.")
-         }
-     }
-     checkSession()
+    // Validate that user is in an active recovery session
+    const checkSession = async () => {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        setError("Link tautan sudah tidak berlaku atau Anda tidak login dalam mode recovery. Silakan ajukan ulang lupa password.")
+      }
+    }
+    checkSession()
   }, [])
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (password !== repeatPassword) {
-        setError('Password tidak cocok')
-        return
+      setError('Password tidak cocok')
+      return
     }
 
     if (password.length < 6) {
-        setError('Password minimal 6 karakter')
-        return
+      setError('Password minimal 6 karakter')
+      return
     }
 
     const supabase = createClient()
@@ -53,7 +53,7 @@ export default function ResetPasswordPage() {
       if (error) throw error
       setSuccess('Password berhasil diubah. Mengarahkan ke halaman login...')
       setTimeout(() => {
-          router.push('/auth/login')
+        router.push('/auth/login')
       }, 2000)
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'Terjadi kesalahan sistem saat menyimpan password baru.')
@@ -66,7 +66,7 @@ export default function ResetPasswordPage() {
     <div className="flex min-h-screen w-full items-center justify-center p-4 pt-24 md:p-8 bg-[#f8fbff] relative diamond-pattern overflow-x-hidden">
       {/* BKAD Logo Absolute Overlay */}
       <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20 flex items-center gap-2 md:gap-3 bg-white/80 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm border border-gray-100">
-        <Image src="/bpkad-logo.png" alt="BKAD Logo" width={24} height={24} className="object-contain md:w-[32px] md:h-[32px]" />
+        <Image src="/bpkad-logo.jpeg" alt="BKAD Logo" width={24} height={24} className="object-contain md:w-[32px] md:h-[32px]" />
         <span className="font-heading font-bold text-gray-800 text-xs md:text-sm tracking-wide">SIVRON</span>
         <span className="font-heading font-bold text-gray-800 text-xs md:text-sm hidden sm:block tracking-wide">— BKAD</span>
       </div>
@@ -133,9 +133,9 @@ export default function ResetPasswordPage() {
             </FieldMessage>
           )}
 
-          <Button 
-            type="submit" 
-            className="w-full h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold tracking-wide text-sm mt-6 transition-all shadow-lg shadow-sky-600/30 disabled:opacity-50" 
+          <Button
+            type="submit"
+            className="w-full h-12 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold tracking-wide text-sm mt-6 transition-all shadow-lg shadow-sky-600/30 disabled:opacity-50"
             disabled={isLoading || !!success || error?.includes('tidak berlaku')}
           >
             {isLoading ? (
