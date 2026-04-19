@@ -113,7 +113,7 @@ export default function DashboardLayout({
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
                 <Link href="/dashboard">
-                  <div className="flex h-8 w-8 items-center justify-center bg-white rounded-lg p-1 shadow-sm"><Image src="/bpkad-logo.png" alt="BPKAD" width={24} height={24} className="object-contain" /></div>
+                  <div className="flex h-8 w-8 items-center justify-center bg-white rounded-lg p-1 shadow-sm"><Image src="/logo-anggaran-2.jpeg" alt="SIVRON" width={24} height={24} className="object-contain rounded-md" /></div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-heading font-bold tracking-wider">
                       SIVRON<span className="text-sky-500 text-xl leading-none">.</span>
@@ -240,7 +240,7 @@ export default function DashboardLayout({
             <SidebarTrigger className="-ml-1 hidden md:flex" />
             <Separator orientation="vertical" className="mx-2 h-4 hidden md:block" />
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="flex h-7 w-7 items-center justify-center bg-white rounded p-0.5 shadow-sm md:hidden"><Image src="/bpkad-logo.png" alt="BPKAD" width={20} height={20} className="object-contain" /></div>
+              <div className="flex h-7 w-7 items-center justify-center bg-white rounded p-0.5 shadow-sm md:hidden"><Image src="/logo-anggaran-2.jpeg" alt="SIVRON" width={20} height={20} className="object-contain rounded-sm" /></div>
               <h2 className="text-sm font-heading font-bold text-gray-900 tracking-wider flex items-center">
                 SIVRON<span className="text-sky-500">.</span>
               </h2>

@@ -101,10 +101,10 @@ export default function SignUpPage() {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center p-4 md:p-8 bg-[#f8fbff] relative diamond-pattern">
-      {/* BPKAD Logo Absolute Overlay */}
+      {/* BKAD Logo Absolute Overlay */}
       <div className="absolute top-6 left-6 md:top-8 md:left-8 z-20 flex items-center gap-3 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm border border-gray-100">
-        <Image src="/bpkad-logo.png" alt="BPKAD Logo" width={32} height={32} className="object-contain" />
-        <span className="font-heading font-bold text-gray-800 text-sm hidden sm:block tracking-wide">SIVRON — BPKAD</span>
+        <Image src="/bpkad-logo.png" alt="BKAD Logo" width={32} height={32} className="object-contain" />
+        <span className="font-heading font-bold text-gray-800 text-sm hidden sm:block tracking-wide">SIVRON — BKAD</span>
       </div>
 
       {/* Floating Centered Card */}
@@ -116,8 +116,8 @@ export default function SignUpPage() {
           <div className="absolute inset-x-0 bottom-0 pointer-events-none neon-border opacity-30 h-1/2 z-0" />
           
           <div className="relative z-10 text-center max-w-md mx-auto">
-            <div className="mx-auto flex items-center justify-center w-20 h-20 rounded-2xl bg-sky-600 mb-8 shadow-[0_0_30px_rgba(14,165,233,0.3)]">
-              <Shield className="w-10 h-10 text-white" />
+            <div className="mx-auto flex items-center justify-center w-20 h-20 bg-white rounded-2xl mb-8 shadow-[0_0_30px_rgba(255,255,255,0.2)] p-2">
+              <Image src="/logo-anggaran-2.jpeg" alt="SIVRON Logo" width={64} height={64} className="object-contain rounded-xl" />
             </div>
             <h1 className="font-heading text-5xl font-bold tracking-tighter mb-4 text-glow">
               SIVRON<span className="text-sky-500">.</span>

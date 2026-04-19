@@ -3,33 +3,10 @@
 import { DottedSurface } from "@/components/ui/dotted-surface"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { ArrowRight, Shield, BarChart3, FileText, Users } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-
-const features = [
-  {
-    icon: FileText,
-    title: "PENGAJUAN DIGITAL",
-    description: "Sistem pengajuan anggaran yang sepenuhnya digital, memangkas proses birokrasi."
-  },
-  {
-    icon: BarChart3,
-    title: "MONITORING REAL-TIME",
-    description: "Pantau serapan dan status anggaran secara langsung melalui dashboard interaktif."
-  },
-  {
-    icon: Shield,
-    title: "KEAMANAN DATA",
-    description: "Terenkripsi dengan teknologi mutakhir untuk menjamin kerahasiaan data fiskal."
-  },
-  {
-    icon: Users,
-    title: "MANAJEMEN PENGGUNA",
-    description: "Sistem hak akses dan verifikasi bertingkat untuk akuntabilitas data."
-  }
-]
 
 export default function LandingPage() {
   return (
@@ -47,7 +24,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 bg-white rounded p-1 shadow-sm">
-              <Image src="/bpkad-logo.png" alt="BPKAD" width={32} height={32} className="object-contain" />
+              <Image src="/logo-anggaran-2.jpeg" alt="SIVRON" width={32} height={32} className="object-contain rounded-lg" />
             </div>
             <div className="flex flex-col">
               <span className="font-heading font-bold text-xl tracking-wider uppercase flex items-center">
@@ -94,41 +71,10 @@ export default function LandingPage() {
             <h1 className="font-heading text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-4 text-glow transition-all">
               SIVRON<span className="text-sky-500">.</span>
             </h1>
-            <p className="font-sans text-lg md:text-xl text-white/60 max-w-2xl mx-auto mt-8 font-light">
-              Sistem verifikasi RKA online yang modern dan terintegrasi penuh untuk perencanaan hingga pelaporan anggaran.
-            </p>
           </motion.div>
         </section>
 
-        {/* Presence / Features Section */}
-        <section id="presence" className="min-h-screen py-24 bg-gradient-to-b from-transparent to-[#0A0A0F] relative px-6">
-          <div className="container mx-auto max-w-6xl">
-            <div className="mb-16 flex items-center gap-4">
-              <span className="w-12 h-[1px] bg-sky-500" />
-              <h3 className="font-mono text-sm tracking-[0.3em] text-sky-500">KAPABILITAS SISTEM</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {features.map((feature, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                >
-                  <div className="group glass-card h-full p-8 rounded-2xl hover:border-sky-500/30 transition-all duration-300">
-                    <feature.icon className="w-8 h-8 text-white/40 mb-6 group-hover:text-sky-500 transition-colors" />
-                    <h4 className="font-heading font-bold text-lg mb-3 tracking-wide">{feature.title}</h4>
-                    <p className="text-white/50 text-sm leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+
         
         {/* Call to Action Footer */}
         <section className="py-24 relative bg-[#050508] flexflex-col items-center justify-center text-center px-4 border-t border-white/5">

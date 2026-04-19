@@ -64,16 +64,16 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center p-4 md:p-8 bg-[#f8fbff] relative diamond-pattern">
-      {/* BPKAD Logo Absolute Overlay */}
+      {/* BKAD Logo Absolute Overlay */}
       <div className="absolute top-6 left-6 md:top-8 md:left-8 z-20 flex items-center gap-3 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm border border-gray-100">
-        <Image src="/bpkad-logo.png" alt="BPKAD Logo" width={32} height={32} className="object-contain" />
-        <span className="font-heading font-bold text-gray-800 text-sm hidden sm:block tracking-wide">SIVRON — BPKAD</span>
+        <Image src="/bpkad-logo.png" alt="BKAD Logo" width={32} height={32} className="object-contain" />
+        <span className="font-heading font-bold text-gray-800 text-sm hidden sm:block tracking-wide">SIVRON — BKAD</span>
       </div>
 
       <div className="w-full max-w-md bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-8 sm:p-12 border border-gray-100/50">
         <div className="text-center mb-8">
-          <div className="mx-auto flex items-center justify-center w-16 h-16 rounded-2xl bg-sky-600 mb-6 shadow-[0_0_30px_rgba(14,165,233,0.3)]">
-            <Shield className="w-8 h-8 text-white" />
+          <div className="mx-auto flex items-center justify-center w-16 h-16 bg-white rounded-2xl mb-6 shadow-[0_0_30px_rgba(255,255,255,0.2)] p-1.5">
+            <Image src="/logo-anggaran-2.jpeg" alt="SIVRON Logo" width={50} height={50} className="object-contain rounded-xl" />
           </div>
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2">Buat Password Baru</h2>
           <p className="text-sm text-gray-500 leading-relaxed">

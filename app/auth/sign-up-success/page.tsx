@@ -9,7 +9,7 @@ export default function SignUpSuccessPage() {
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center justify-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center bg-white rounded p-1 shadow-sm mb-2">
-            <Image src="/bpkad-logo.png" alt="BPKAD" width={40} height={40} className="object-contain" />
+            <Image src="/logo-anggaran-2.jpeg" alt="SIVRON" width={40} height={40} className="object-contain rounded-xl" />
           </div>
           <div className="text-center">
             <h1 className="font-heading text-3xl font-bold tracking-tighter">
