@@ -53,7 +53,7 @@ function LoginForm() {
     <div className="flex min-h-screen w-full items-center justify-center p-4 pt-24 md:p-8 bg-[#f8fbff] relative diamond-pattern overflow-x-hidden">
       {/* BKAD Logo Absolute Overlay */}
       <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20 flex items-center gap-2 md:gap-3 bg-white/80 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-sm border border-gray-100">
-        <Image src="/bpkad-logo.jpeg" alt="BKAD Logo" width={24} height={24} className="object-contain md:w-[32px] md:h-[32px]" />
+        <Image src="/bkad-logo.jpeg" alt="BKAD Logo" width={24} height={24} className="object-contain md:w-[32px] md:h-[32px]" />
         <span className="font-heading font-bold text-gray-800 text-xs md:text-sm tracking-wide">SIVRON</span>
         <span className="font-heading font-bold text-gray-800 text-xs md:text-sm hidden sm:block tracking-wide">— BKAD</span>
       </div>
