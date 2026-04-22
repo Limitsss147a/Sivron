@@ -134,16 +134,16 @@ export default function BudgetDetailPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl overflow-hidden">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex items-start gap-3">
-          <Button variant="ghost" size="icon" asChild className="mt-1">
+    <div className="space-y-6 max-w-4xl overflow-hidden w-full">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between w-full min-w-0">
+        <div className="flex items-start gap-3 w-full min-w-0 flex-1">
+          <Button variant="ghost" size="icon" asChild className="mt-1 shrink-0">
             <Link href="/dashboard/budgets"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-bold tracking-tight">{budget.title}</h1>
-              <Badge className={`${config.color} border-0`}>{config.label}</Badge>
+              <h1 className="text-2xl font-bold tracking-tight break-words leading-tight">{budget.title}</h1>
+              <Badge className={`${config.color} border-0 shrink-0`}>{config.label}</Badge>
             </div>
           </div>
         </div>
@@ -183,12 +183,12 @@ export default function BudgetDetailPage() {
         </div>
       </div>
 
-      <Card className="border-0 shadow-md rounded-xl overflow-hidden">
-        <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4">
-          <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-sky-500" /> SKPD Pengusul
+      <Card className="border-0 shadow-md rounded-xl overflow-hidden w-full max-w-full">
+        <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4 min-w-0">
+          <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2 min-w-0 break-words">
+            <Building2 className="w-5 h-5 text-sky-500 shrink-0" /> <span className="truncate">SKPD Pengusul</span>
           </CardTitle>
-          <CardDescription>Informasi Instansi yang mengajukan</CardDescription>
+          <CardDescription className="truncate">Informasi Instansi yang mengajukan</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
@@ -198,10 +198,10 @@ export default function BudgetDetailPage() {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="space-y-6 md:col-span-2">
+      <div className="grid md:grid-cols-2 gap-6 w-full max-w-full min-w-0">
+        <div className="space-y-6 md:col-span-2 w-full max-w-full min-w-0">
           {documents.length > 0 ? documents.map((doc, index) => (
-            <Card key={doc.id || index} className="border-0 shadow-md rounded-xl overflow-hidden bg-card">
+            <Card key={doc.id || index} className="border-0 shadow-md rounded-xl overflow-hidden bg-card w-full max-w-full min-w-0">
               <div className="p-4 border-b border-sky-100 bg-sky-500/5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between min-w-0 w-full">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <FileText className={`h-8 w-8 shrink-0 ${doc.document_type === 'rka_dpa' ? 'text-emerald-500' : 'text-blue-500'}`} />
@@ -214,19 +214,19 @@ export default function BudgetDetailPage() {
                   <Download className="mr-2 w-4 h-4 shrink-0" /> Buka Dokumen
                 </Button>
               </div>
-              <div className="p-0 grid grid-cols-2 lg:grid-cols-4 divide-y divide-x lg:divide-y-0 border-b border-border/50 bg-card/50">
+              <div className="p-0 grid grid-cols-2 lg:grid-cols-4 divide-y divide-x lg:divide-y-0 border-b border-border/50 bg-card/50 w-full max-w-full min-w-0">
                 {ADMIN_ROLES.map((role) => {
                   const statusStr = (doc as any)[role.key] || 'pending'
                   const labelStr = statusLabels[statusStr as string] || 'Menunggu'
                   
                   return (
-                    <div key={role.key} className="p-4 flex flex-col justify-between gap-3">
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center justify-between">
-                          <p className="font-bold text-xs text-foreground/80 uppercase tracking-wider">{role.label}</p>
+                    <div key={role.key} className="p-4 flex flex-col justify-between gap-3 min-w-0">
+                      <div className="flex flex-col gap-2 min-w-0">
+                        <div className="flex items-center justify-between min-w-0">
+                          <p className="font-bold text-xs text-foreground/80 uppercase tracking-wider break-words whitespace-normal leading-tight">{role.label}</p>
                         </div>
                         <div>
-                          <Badge className={`${statusBadgeColor(statusStr)} border-0 shadow-none text-xs px-2.5 py-0.5 rounded-full`}>{labelStr}</Badge>
+                          <Badge className={`${statusBadgeColor(statusStr)} border-0 shadow-none text-xs px-2.5 py-0.5 rounded-full shrink-0`}>{labelStr}</Badge>
                         </div>
                       </div>
                     </div>
@@ -239,26 +239,26 @@ export default function BudgetDetailPage() {
           )}
 
           {revisions.length > 0 && (
-            <Card className="mt-6 border-0 shadow-md rounded-xl overflow-hidden">
-              <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4">
-                <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-sky-500" /> Riwayat Review Dokumen
+            <Card className="mt-6 border-0 shadow-md rounded-xl overflow-hidden w-full max-w-full">
+              <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4 min-w-0">
+                <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2 min-w-0 break-words">
+                  <MessageSquare className="w-5 h-5 text-sky-500 shrink-0" /> <span className="truncate">Riwayat Review Dokumen</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="space-y-2 relative">
                   {revisions.map((rev, index) => (
-                    <div key={rev.id} className="relative flex gap-4">
+                    <div key={rev.id} className="relative flex gap-4 w-full min-w-0">
                       {index < revisions.length - 1 && <div className="absolute left-[15px] top-10 bottom-[-24px] w-0.5 bg-gray-200 rounded-full" />}
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 border-[3px] border-white shadow-sm mt-1 z-10 content-start">
                         <MessageSquare className="w-3.5 h-3.5" />
                       </div>
                       <div className="flex-1 min-w-0 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4 hover:shadow-md transition-shadow">
                         <div className="py-2.5 px-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50/80 gap-2">
-                          <div>
-                            <p className="text-sm font-bold text-gray-800">{(rev as any).reviewer?.full_name || 'System'}</p>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-bold text-gray-800 break-words leading-tight">{(rev as any).reviewer?.full_name || 'System'}</p>
                             <p className="text-[11px] text-gray-500 font-medium tracking-wide flex items-center gap-1.5 mt-0.5">
-                              <Clock className="w-3 h-3" /> {formatDateTime(rev.created_at)}
+                              <Clock className="w-3 h-3 shrink-0" /> <span className="truncate">{formatDateTime(rev.created_at)}</span>
                             </p>
                           </div>
                         </div>
