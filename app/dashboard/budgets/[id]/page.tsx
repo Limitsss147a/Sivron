@@ -73,9 +73,15 @@ export default function BudgetDetailPage() {
   async function handleDownload(doc: BudgetDocument) {
     try {
       const supabase = createClient()
-      const { data, error } = await supabase.storage.from('budget_documents').createSignedUrl(doc.file_path, 3600)
+      const { data, error } = await supabase.storage.from('budget_documents').createSignedUrl(doc.file_path, 3600, {
+        download: doc.file_name || true,
+      })
       if (error) throw error
-      if (data?.signedUrl) window.open(data.signedUrl, '_blank')
+      if (data?.signedUrl) {
+        // Replace the download header with inline to open in browser tab instead of forcing download
+        const inlineUrl = data.signedUrl.replace('response-content-disposition=attachment%3B', 'response-content-disposition=inline%3B')
+        window.open(inlineUrl, '_blank')
+      }
     } catch (error) {
       toast.error('Gagal mengunduh dokumen')
     }
