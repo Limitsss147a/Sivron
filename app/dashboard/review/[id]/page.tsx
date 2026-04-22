@@ -367,16 +367,16 @@ export default function ReviewDetailPage() {
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 border-[3px] border-white shadow-sm mt-1 z-10 content-start">
                         <MessageSquare className="w-3.5 h-3.5" />
                       </div>
-                      <div className="flex-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4 hover:shadow-md transition-shadow">
+                      <div className="flex-1 min-w-0 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4 hover:shadow-md transition-shadow">
                         <div className="py-2.5 px-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50/80 gap-2">
-                          <div>
-                            <p className="text-sm font-bold text-gray-800">{(rev as any).reviewer?.full_name || 'System'}</p>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-bold text-gray-800 truncate">{(rev as any).reviewer?.full_name || 'System'}</p>
                             <p className="text-[11px] text-gray-500 font-medium tracking-wide flex items-center gap-1.5 mt-0.5">
                               <Clock className="w-3 h-3" /> {formatDateTime(rev.created_at)}
                             </p>
                           </div>
                           {(profile?.id === rev.reviewer_id || isAdmin) && (
-                            <div className="flex items-center gap-1 sm:self-start">
+                            <div className="flex items-center gap-1 sm:self-start shrink-0">
                               <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-500 hover:text-sky-600 hover:bg-sky-50" onClick={() => { setEditingReview(rev); setEditComment(rev.comments || '') }}>
                                 <Edit2 className="w-3.5 h-3.5" />
                               </Button>
@@ -387,7 +387,7 @@ export default function ReviewDetailPage() {
                           )}
                         </div>
                         {rev.comments && (
-                          <div className="p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                          <div className="p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap break-words">
                             {rev.comments}
                           </div>
                         )}

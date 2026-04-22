@@ -253,7 +253,7 @@ export default function BudgetDetailPage() {
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 border-[3px] border-white shadow-sm mt-1 z-10 content-start">
                         <MessageSquare className="w-3.5 h-3.5" />
                       </div>
-                      <div className="flex-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4 hover:shadow-md transition-shadow">
+                      <div className="flex-1 min-w-0 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4 hover:shadow-md transition-shadow">
                         <div className="py-2.5 px-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50/80 gap-2">
                           <div>
                             <p className="text-sm font-bold text-gray-800">{(rev as any).reviewer?.full_name || 'System'}</p>
@@ -263,7 +263,7 @@ export default function BudgetDetailPage() {
                           </div>
                         </div>
                         {rev.comments && (
-                          <div className="p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                          <div className="p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap break-words">
                             {rev.comments}
                           </div>
                         )}
