@@ -84,15 +84,9 @@ export default function ReviewDetailPage() {
   async function handleDownload(doc: any) {
     try {
       const supabase = createClient()
-      const { data, error } = await supabase.storage.from('budget_documents').createSignedUrl(doc.file_path, 3600, {
-        download: doc.file_name || true,
-      })
+      const { data, error } = await supabase.storage.from('budget_documents').createSignedUrl(doc.file_path, 3600)
       if (error) throw error
-      if (data?.signedUrl) {
-        // Replace the download header with inline to open in browser tab instead of forcing download
-        const inlineUrl = data.signedUrl.replace('response-content-disposition=attachment%3B', 'response-content-disposition=inline%3B')
-        window.open(inlineUrl, '_blank')
-      }
+      if (data?.signedUrl) window.open(data.signedUrl, '_blank')
     } catch (error) {
       toast.error('Gagal membuka dokumen')
     }
@@ -252,7 +246,7 @@ export default function ReviewDetailPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-card p-5 rounded-xl border border-border/60 shadow-sm">
         <div className="flex items-start gap-4">
           <Button variant="outline" size="icon" asChild className="shrink-0 rounded-full h-10 w-10">
@@ -308,7 +302,7 @@ export default function ReviewDetailPage() {
                 </Button>
               </div>
               {isAdmin && (
-                <div className="p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x border-b border-border/50 bg-card/50">
+                <div className="p-0 grid grid-cols-2 lg:grid-cols-4 divide-y divide-x lg:divide-y-0 border-b border-border/50 bg-card/50">
                   {ADMIN_ROLES.map((role) => {
                     const statusStr = doc[role.key] || 'pending'
                     const labelStr = statusLabels[statusStr] || 'Menunggu'

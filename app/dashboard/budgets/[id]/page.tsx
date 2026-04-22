@@ -73,15 +73,9 @@ export default function BudgetDetailPage() {
   async function handleDownload(doc: BudgetDocument) {
     try {
       const supabase = createClient()
-      const { data, error } = await supabase.storage.from('budget_documents').createSignedUrl(doc.file_path, 3600, {
-        download: doc.file_name || true,
-      })
+      const { data, error } = await supabase.storage.from('budget_documents').createSignedUrl(doc.file_path, 3600)
       if (error) throw error
-      if (data?.signedUrl) {
-        // Replace the download header with inline to open in browser tab instead of forcing download
-        const inlineUrl = data.signedUrl.replace('response-content-disposition=attachment%3B', 'response-content-disposition=inline%3B')
-        window.open(inlineUrl, '_blank')
-      }
+      if (data?.signedUrl) window.open(data.signedUrl, '_blank')
     } catch (error) {
       toast.error('Gagal mengunduh dokumen')
     }
@@ -140,7 +134,7 @@ export default function BudgetDetailPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <div className="space-y-6 max-w-4xl overflow-hidden">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
           <Button variant="ghost" size="icon" asChild className="mt-1">
@@ -218,7 +212,7 @@ export default function BudgetDetailPage() {
                   <Download className="mr-2 w-4 h-4 shrink-0" /> Buka Dokumen
                 </Button>
               </div>
-              <div className="p-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x border-b border-border/50 bg-card/50">
+              <div className="p-0 grid grid-cols-2 lg:grid-cols-4 divide-y divide-x lg:divide-y-0 border-b border-border/50 bg-card/50">
                 {ADMIN_ROLES.map((role) => {
                   const statusStr = (doc as any)[role.key] || 'pending'
                   const labelStr = statusLabels[statusStr as string] || 'Menunggu'
