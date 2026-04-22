@@ -17,7 +17,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from '@/components/ui/dialog'
 import { toast } from 'sonner'
-import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, ArrowRightLeft, MessageSquare, FileText, Download, Clock, Shield, Lock, Trash2, Edit2, ClipboardCheck } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, ArrowRightLeft, MessageSquare, FileText, Download, Clock, Shield, Lock, Trash2, Edit2, ClipboardCheck, Building2 } from 'lucide-react'
 import Link from 'next/link'
 
 type AdminReviewRole = 'review_bapperida' | 'review_setda' | 'review_anggaran' | 'review_aset'
@@ -272,12 +272,14 @@ export default function ReviewDetailPage() {
         )}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">SKPD Pengusul</CardTitle>
+      <Card className="border-0 shadow-md rounded-xl overflow-hidden">
+        <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4">
+          <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-sky-500" /> SKPD Pengusul
+          </CardTitle>
           <CardDescription>Informasi Instansi yang mengajukan</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
             <p className="font-semibold text-lg text-primary">{budget.institution?.name || '-'}</p>
             <p className="text-sm text-muted-foreground mt-1">Kode: {budget.institution?.code || '-'}</p>
@@ -288,8 +290,8 @@ export default function ReviewDetailPage() {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-6 md:col-span-2">
           {documents.length > 0 ? documents.map((doc, index) => (
-            <Card key={doc.id || index} className="overflow-hidden border-primary/20 bg-primary/5">
-              <div className="p-4 border-b flex flex-col sm:flex-row sm:items-center gap-4 justify-between bg-card">
+            <Card key={doc.id || index} className="border-0 shadow-md rounded-xl overflow-hidden bg-card">
+              <div className="p-4 border-b border-sky-100 bg-sky-500/5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
                 <div className="flex items-center gap-3 min-w-0">
                   <FileText className={`h-8 w-8 shrink-0 ${doc.document_type === 'rka_dpa' ? 'text-emerald-500' : 'text-blue-500'}`} />
                   <div className="min-w-0">

@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
 import {
-  ArrowLeft, Edit, Send, Trash2, FileText, Download, Clock, CheckCircle2, XCircle, AlertCircle, ArrowRightLeft, MessageSquare, Printer,
+  ArrowLeft, Edit, Send, Trash2, FileText, Download, Clock, CheckCircle2, XCircle, AlertCircle, ArrowRightLeft, MessageSquare, Printer, Building2
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -183,12 +183,14 @@ export default function BudgetDetailPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">SKPD Pengusul</CardTitle>
+      <Card className="border-0 shadow-md rounded-xl overflow-hidden">
+        <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4">
+          <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-sky-500" /> SKPD Pengusul
+          </CardTitle>
           <CardDescription>Informasi Instansi yang mengajukan</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
             <p className="font-semibold text-lg text-primary">{budget.institution?.name || '-'}</p>
             <p className="text-sm text-muted-foreground mt-1">Kode: {budget.institution?.code || '-'}</p>
@@ -199,8 +201,8 @@ export default function BudgetDetailPage() {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-6 md:col-span-2">
           {documents.length > 0 ? documents.map((doc, index) => (
-            <Card key={doc.id || index} className="overflow-hidden border-primary/20 bg-primary/5">
-              <div className="p-4 border-b flex flex-col sm:flex-row sm:items-center gap-4 justify-between bg-card min-w-0 w-full overflow-hidden">
+            <Card key={doc.id || index} className="border-0 shadow-md rounded-xl overflow-hidden bg-card">
+              <div className="p-4 border-b border-sky-100 bg-sky-500/5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between min-w-0 w-full">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
                   <FileText className={`h-8 w-8 shrink-0 ${doc.document_type === 'rka_dpa' ? 'text-emerald-500' : 'text-blue-500'}`} />
                   <div className="min-w-0 flex-1">
@@ -237,17 +239,33 @@ export default function BudgetDetailPage() {
           )}
 
           {revisions.length > 0 && (
-            <Card>
-              <CardHeader><CardTitle className="text-base">Riwayat Review</CardTitle></CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+            <Card className="mt-6 border-0 shadow-md rounded-xl overflow-hidden">
+              <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4">
+                <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5 text-sky-500" /> Riwayat Review Dokumen
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="space-y-2 relative">
                   {revisions.map((rev, index) => (
                     <div key={rev.id} className="relative flex gap-4">
-                      {index < revisions.length - 1 && <div className="absolute left-[13px] top-8 bottom-0 w-px bg-border" />}
-                      <div className="flex-1 pb-4">
-                        <p className="text-xs text-muted-foreground">{(rev as any).reviewer?.full_name || 'System'} • {formatDateTime(rev.created_at)}</p>
+                      {index < revisions.length - 1 && <div className="absolute left-[15px] top-10 bottom-[-24px] w-0.5 bg-gray-200 rounded-full" />}
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 border-[3px] border-white shadow-sm mt-1 z-10 content-start">
+                        <MessageSquare className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="flex-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4 hover:shadow-md transition-shadow">
+                        <div className="py-2.5 px-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50/80 gap-2">
+                          <div>
+                            <p className="text-sm font-bold text-gray-800">{(rev as any).reviewer?.full_name || 'System'}</p>
+                            <p className="text-[11px] text-gray-500 font-medium tracking-wide flex items-center gap-1.5 mt-0.5">
+                              <Clock className="w-3 h-3" /> {formatDateTime(rev.created_at)}
+                            </p>
+                          </div>
+                        </div>
                         {rev.comments && (
-                          <div className="mt-1.5 rounded-md bg-muted/50 p-2.5 text-sm break-words whitespace-pre-wrap overflow-hidden">{rev.comments}</div>
+                          <div className="p-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                            {rev.comments}
+                          </div>
                         )}
                       </div>
                     </div>

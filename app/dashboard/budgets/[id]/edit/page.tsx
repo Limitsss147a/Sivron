@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Spinner } from '@/components/ui/spinner'
 import { toast } from 'sonner'
-import { ArrowLeft, Save, FileText, UploadCloud, Download, X } from 'lucide-react'
+import { ArrowLeft, Save, FileText, UploadCloud, Download, X, Building2 } from 'lucide-react'
 import Link from 'next/link'
 
 export default function EditBudgetPage() {
@@ -109,12 +109,14 @@ export default function EditBudgetPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">SKPD Pengusul</CardTitle>
+      <Card className="border-0 shadow-md rounded-xl overflow-hidden">
+        <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4">
+          <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-sky-500" /> SKPD Pengusul
+          </CardTitle>
           <CardDescription>Informasi Instansi yang mengajukan</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-6">
           <div className="space-y-2">
             <Label>Nama Instansi / SKPD</Label>
             <Input value={budget.institution?.name || ''} disabled className="bg-muted text-muted-foreground" />
@@ -126,12 +128,14 @@ export default function EditBudgetPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Perbarui Dokumen (Opsional)</CardTitle>
+      <Card className="border-0 shadow-md rounded-xl overflow-hidden">
+        <CardHeader className="bg-sky-500/5 border-b border-sky-100 pb-4">
+          <CardTitle className="text-lg font-bold text-sky-900 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-sky-500" /> Perbarui Dokumen (Opsional)
+          </CardTitle>
           <CardDescription>Unggah file baru jika perlu mengganti dokumen sebelumnya.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 pt-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <Label>1. Nota Dinas</Label>
