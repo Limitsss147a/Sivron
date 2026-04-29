@@ -3,9 +3,29 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { kv } from '@vercel/kv'
 
 export async function middleware(request: NextRequest) {
-  // 1. Session Management
+  // 1. Content Security Policy (Nonce-based)
+  const nonce = crypto.randomUUID()
+  const isDev = process.env.NODE_ENV !== 'production'
+  
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://ktsmqpzifzjsjgfowvph.supabase.co https://va.vercel-scripts.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    img-src 'self' blob: data: https://ktsmqpzifzjsjgfowvph.supabase.co;
+    font-src 'self' https://fonts.gstatic.com;
+    connect-src 'self' https://ktsmqpzifzjsjgfowvph.supabase.co wss://ktsmqpzifzjsjgfowvph.supabase.co https://vitals.vercel-insights.com;
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `.replace(/\s{2,}/g, ' ').trim()
+
+  request.headers.set('x-nonce', nonce)
+  request.headers.set('Content-Security-Policy', cspHeader)
+
+  // 2. Session Management
   const response = await updateSession(request)
 
+  response.headers.set('Content-Security-Policy', cspHeader)
+  response.headers.set('x-nonce', nonce)
   // 2. Rate Limiting (10 requests per 10 seconds per IP)
   // Only apply to critical routes (e.g., /api/auth, /api/submissions)
   if (request.nextUrl.pathname.startsWith('/api/') || request.nextUrl.pathname.startsWith('/auth/')) {

@@ -20,10 +20,7 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://ktsmqpzifzjsjgfowvph.supabase.co https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://ktsmqpzifzjsjgfowvph.supabase.co; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://ktsmqpzifzjsjgfowvph.supabase.co wss://ktsmqpzifzjsjgfowvph.supabase.co https://vitals.vercel-insights.com; frame-ancestors 'none'; upgrade-insecure-requests;",
-          },
+
           {
             key: 'X-Frame-Options',
             value: 'DENY',
