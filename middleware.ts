@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
   
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://ktsmqpzifzjsjgfowvph.supabase.co https://va.vercel-scripts.com;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://ktsmqpzifzjsjgfowvph.supabase.co https://va.vercel-scripts.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     img-src 'self' blob: data: https://ktsmqpzifzjsjgfowvph.supabase.co;
     font-src 'self' https://fonts.gstatic.com;
